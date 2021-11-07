@@ -16,9 +16,11 @@ class DailyScheduleOfGames extends Post{
 
     public function setUserPicks($user_id, $user_picks){
         $picks = $this->picks();
+        if(!is_array($picks)){
+            $picks=array();
+        }
         if(isset($picks[$user_id])){
-            diebug($picks);
-            diebug("picks already set.  can't chang 'em now!");
+            //diebug("picks already set.  can't chang 'em now!");
         }
         $picks[$user_id] = $user_picks;
         $this->update_meta("picks", $picks);

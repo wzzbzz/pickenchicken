@@ -36,7 +36,7 @@ class Game extends Model{
     }
 
     public function gameStartedInThePast(){
-        
+
         return strtotime($this->acf_data['date_time']) < time();
 
     }

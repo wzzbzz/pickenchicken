@@ -7,11 +7,12 @@ class DailyPicksView extends View{
 
     public function renderBody(){
         $games = $this->data->getGames();
-        $allGamesFinished = $allGamesStarted = true;
+        $allGamesFinished = $allGamesStarted = false;
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
         $chickenResults = $userResults = array("win"=>0,"loss"=>0,"push"=>0);
         foreach($games as $i=>$game){
-            $allGamesStarted = $allGamesStarted && $game->gameStartedInThePast();
+            
+            //$allGamesStarted = $allGamesStarted && $game->gameStartedInThePast();
             $allGamesFinished = $allGamesStarted && $game->gameIsDecided();
             if($game->gameIsDecided()){
                 if($game->winningPick()=="push"){
@@ -50,13 +51,17 @@ class DailyPicksView extends View{
                 <h6>Chicken's results: <?= $chickenResults['win'] . "-".$chickenResults['loss']."-".$chickenResults['push']?></h6>
             </div>
             </div>
-            <?php if ($allGamesStarted):
+            <?php if ($allGamesDecided):
             if($userResults['win']>$chickenResults['win']){
                 $text = "You plucked the chicken!";
                 $textClass="text-success";
             }
-            else{
+            elseif($userResults['win']<$chickenResults['win']){
                 $text = "You got pecked by the chicken!";
+                $textClass="text-danger";
+            }
+            else{
+                $text="You equaled a chicken.";
                 $textClass="text-danger";
             }
                 
@@ -72,7 +77,7 @@ class DailyPicksView extends View{
             <form action="actions/dailyPicks" method="post">
             <input type="hidden" name="postId" value="<?= $this->data->id();?>"/>
             <?php foreach ($games as $i=>$game): 
-                $disabled = $game->gameStartedInThePast()?"disabled":"";
+                $disabled = "";//$game->gameStartedInThePast()?"disabled":"";
                 $userPick = array_shift($userPicks); 
 
                 $homeSelected = ($userPick=="home")?"checked":"";

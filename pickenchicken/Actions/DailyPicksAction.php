@@ -10,6 +10,7 @@ class DailyPicksAction{
         
         $this->postId = $_REQUEST['postId'];
         $this->gamePicks = $_REQUEST['gamePicks'];
+
     }
     public function __destruct(){}
     public function do(){
@@ -20,6 +21,7 @@ class DailyPicksAction{
             $user = new User(wp_get_current_user());
             $user->setDailyPicks($this->postId, $this->gamePicks);
         }
+        wp_redirect("/pickenchicken");
         die;
     }
 
