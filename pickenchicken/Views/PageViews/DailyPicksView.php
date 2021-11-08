@@ -127,11 +127,12 @@ class DailyPicksView extends View{
                         else{
                             $textClass=$game->pickIsWinner($game->chickenPick())?"text-success":"text-danger";
                         }
-                        $text = "Chicken Picked <span class='{$textClass}'>{$team->abbreviation()}</span>";
+                        
                         
                     ?>
-                    <div class="chickenPickResult"><?=$text;?></div>
+                    
                 <?php endif;?>
+                <div class="chickenPickResult">Chicken Picked <span class='<?=$textClass;?>'>{$team->abbreviation()}</span></div>";
                 </div>
                 <div class="col text-center" id="home">
                 <input type="radio" name="gamePicks[<?=$i?>]" value="home" <?= $disabled;?> <?= $homeSelected;?>/>
