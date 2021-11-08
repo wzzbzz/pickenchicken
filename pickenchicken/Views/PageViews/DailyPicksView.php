@@ -51,7 +51,7 @@ class DailyPicksView extends View{
                 <h6>Chicken's results: <?= $chickenResults['win'] . "-".$chickenResults['loss']."-".$chickenResults['push']?></h6>
             </div>
             </div>
-            <?php if ($allGamesDecided):
+            <?php if ($allGamesFinished):
             if($userResults['win']>$chickenResults['win']){
                 $text = "You plucked the chicken!";
                 $textClass="text-success";
