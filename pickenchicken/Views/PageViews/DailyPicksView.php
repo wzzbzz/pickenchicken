@@ -42,14 +42,14 @@ class DailyPicksView extends View{
         <h6 class="d-flex justify-content-center">Games for <?php echo $this->data->title();?></h6>
         <div class="container mb-5">
             <div class="row">
-            <div class="col text-center">
-                <h6>Your results: <?= $userResults['win'] . "-".$userResults['loss']."-".$userResults['push']?></h6>
-            </div>
+                <div class="col text-center">
+                    <h6>Your results: <?= $userResults['win'] . "-".$userResults['loss']."-".$userResults['push']?></h6>
+                </div>
             </div>
             <div class="row">
-            <div class="col text-center">
-                <h6>Chicken's results: <?= $chickenResults['win'] . "-".$chickenResults['loss']."-".$chickenResults['push']?></h6>
-            </div>
+                <div class="col text-center">
+                    <h6>Chicken's results: <?= $chickenResults['win'] . "-".$chickenResults['loss']."-".$chickenResults['push']?></h6>
+                </div>
             </div>
             <?php if ($allGamesFinished):
             if($userResults['win']>$chickenResults['win']){
