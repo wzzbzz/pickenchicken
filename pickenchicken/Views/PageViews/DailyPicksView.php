@@ -82,7 +82,7 @@ class DailyPicksView extends View{
 
                 $homeSelected = ($userPick=="home")?"checked":"";
                 $awaySelected = ($userPick=="away")?"checked":"";
-
+                $textClass="";
 
             ?>
             <div class="row justify-content-center">
@@ -132,7 +132,7 @@ class DailyPicksView extends View{
                     ?>
                     
                 <?php endif;?>
-                <div class="chickenPickResult">Chicken Picked <span class='<?=$textClass;?>'><?=$team->abbreviation()?></span></div>";
+                <div class="chickenPickResult">Chicken Picked <span class='<?=$textClass;?>'><?=$team->abbreviation()?></span></div>
                 </div>
                 <div class="col text-center" id="home">
                 <input type="radio" name="gamePicks[<?=$i?>]" value="home" <?= $disabled;?> <?= $homeSelected;?>/>
