@@ -84,6 +84,7 @@ class DailyPicksView extends View{
                 $awaySelected = ($userPick=="away")?"checked":"";
                 $textClass="";
 
+                $team = $game->teamFromHomeAway($game->chickenPick());
             ?>
             <div class="row justify-content-center">
                 <div class="col text-center" id="away">
@@ -120,7 +121,6 @@ class DailyPicksView extends View{
                 ?>
                     <div class="userPickResult <?=$textClass;?>"><?=$text;?></div>
                     <?php
-                        $team = $game->teamFromHomeAway($game->chickenPick());
                         if($game->winningPick()=="push"){
                             $textClass="text-warning";
                         }
