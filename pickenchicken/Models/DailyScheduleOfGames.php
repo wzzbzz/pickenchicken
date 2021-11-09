@@ -4,7 +4,7 @@ namespace pickenchicken\Models;
 use bandpress\Models\Post;
 
 class DailyScheduleOfGames extends Post{
-    public function getGames(){
+    public function getGames2(){
         //TBD - create "game" object and return array;
         //tbd rename field to "games"
         $games = [];
@@ -12,6 +12,26 @@ class DailyScheduleOfGames extends Post{
             $games[] = new Game($game);
         }
         return $games;
+    }
+
+    public function updateGamesFromFeed($data){
+        $games = $this->getGames();
+
+        // preserve chicken pick and spread
+        foreach($games as $i=>$game){
+            $data[$i]->chickenPick = $game->chickenPick;
+            $data[$i]->pointSpread = $game->pointSpread;
+        }
+        $this->update_meta("games",$data);
+
+    }
+
+    public function getGames(){
+        return $this->get_meta("games",true);
+    }
+
+    public function updateGames( $games ){
+        $this->update_meta("games",$games);
     }
 
     public function setUserPicks($user_id, $user_picks){

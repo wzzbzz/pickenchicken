@@ -108,11 +108,11 @@ die;
 ?>
             <div class="row justify-content-center">
                 <div class="col text-center" id="away">
-                <?= $game->awayTeam()->abbreviation();?>
+                <?= $game->awayTeamAbb;?>
                 </div>
-                <div class="col text-center"><?= $game->displayPointSpread();?></div>
+                <div class="col text-center"><?= $game->awayTeamAbb;?> <?=$game->pointSpread<0?"":"+";?><?= $game->pointSpread;?></div>
                 <div class="col text-center" id="home">
-                <?= $game->homeTeam()->abbreviation();?>
+                <?= $game->homeTeamAbb;?>
                 </div>
             </div>
             <div class="row mb-3 justify-content-center">
@@ -127,10 +127,9 @@ die;
             </div>
 
             <?php endforeach;?>
-            <?php $disabled = $allGamesStarted?"disabled":"";?>
             <div class="row">
                 <div class="col text-center">
-                <button type="submit" <?=$disabled;?>>Lock 'em in</button>
+                <button type="submit" >Lock 'em in</button>
                 </div>
             </div>
             </form>
@@ -146,8 +145,8 @@ die;
             <?php foreach ($this->data->getGames() as $i=>$game): 
                 $userPick = $userPicks[$i];
                 $textClass="";
-                $userTeam = $game->teamFromHomeAway($userPick);
-                $chickenTeam = $game->teamFromHomeAway($game->chickenPick());
+                $userTeam = ($userPick=="away")?$game->awayTeamAbb:$game->homeTeamAbb;
+                $chickenTeam = ($game->chickenPick=="away")?$game->awayTeamAbb:$game->homeTeamAbb;
             ?>
             <div class="row justify-content-center">
                 <div class="col text-center">
@@ -162,55 +161,62 @@ die;
             </div>
             <div class="row justify-content-center">
                 <div class="col text-center" id="away">
-                <?= $game->awayTeam()->abbreviation();?>
+                <?= $game->awayTeamAbb;?>
                 </div>
-                <div class="col text-center"><?= $game->displayPointSpread();?></div>
+                <div class="col text-center"><?=$game->awayTeamAbb;?> <?=($game->pointSpread>0)?"+":"";?><?= $game->pointSpread;?></div>
                 <div class="col text-center" id="home">
-                <?= $game->homeTeam()->abbreviation();?>
+                <?= $game->homeTeamAbb;?>
                 </div>
             </div>
+            
             <div class="row mb-3 justify-content-center">
                 <div class="col text-center" id="away">
                 
                 </div>
                 <div class="col text-center">
-                <?php if ($game->gameIsDecided()):?>
-                <div><?php echo $game->awayScore();?> - <?php echo $game->homeScore();?></div>
+                <?php if ($game->status=="Completed"):?>
+                <div><?php echo $game->scoreAwayTotal;?> - <?php echo $game->scoreHomeTotal;?></div>
                 <?php
-                    if($game->winningPick()=="push"){
+                    $adjustedScore = ($game->scoreAwayTotal + $game->pointSpread) - $game->scoreHomeTotal;
+                    if($adjustedScore==0){
                         $text="Push";
                         $textClass="text-warning";
                         $userPicks["push"]++;
                     }
                     else{
-                        if($game->pickIsWinner($userPick)){
-                            $text="You picked {$userTeam->abbreviation()}. You Win!";
+                        $winner = ($adjustedScore)>0?"away":"home";
+                        $loser = ($adjustedScore)<0?"away":"home";
+                        $winnerAbbr = $winner."TeamAbb";
+                        $loserAbbr = $loser."TeamAbb";
+         
+                        if($winner == $userPick){
+                            $text="You picked {$game->$winnerAbbr}. You Win!";
                             $textClass="text-success";
                         }
                         else{
-                            $text="You picked {$userTeam->abbreviation()}. You lose.";
+                            $text="You picked {$game->$loserAbbr}. You lose.";
                             $textClass="text-danger";
                         }
                     }
                 ?>
                     <div class="userPickResult <?=$textClass;?>"><?=$text;?></div>
                     <?php
-                        if($game->winningPick()=="push"){
+                        if($adjustedScore==0){
                             $textClass="text-warning";
                         }
                         else{
-                            $textClass=$game->pickIsWinner($game->chickenPick())?"text-success":"text-danger";
+                            $winner = ($adjustedScore)>0?"away":"home";
+                            $textClass=($winner == $game->chickenPick)?"text-success":"text-danger";
                         }
                         
                         
                     ?>
                 <?php else:?>
-                    <div class="userPickResult">You Picked <span class='<?=$textClass;?>'><?=$userTeam->abbreviation()?></span></div>
+                    <div class="userPickResult">You Picked <span class='<?=$textClass;?>'><?=$userTeam?></span></div>
                 <?php endif;?>
-                <div class="chickenPickResult">Chicken Picked <span class='<?=$textClass;?>'><?=$chickenTeam->abbreviation()?></span></div>
-                
+                    <div class="chickenPickResult">Chicken Picked <span class='<?=$textClass;?>'><?=$chickenTeam?></span></div>
                 </div>
-                <div class="col text-center" id="home">
+                 <div class="col text-center" id="home">
                 
                 </div>
             </div>
@@ -236,10 +242,10 @@ die;
         foreach($this->data->getGames() as $i=>$game){
             
             //$allGamesStarted = $allGamesStarted && $game->gameStartedInThePast();
-            
-            if($game->gameIsDecided()){
+            if($game->status=="Completed"){
+                $adjustedScore = ($game->scoreAwayTotal + $game->pointSpread) - $game->scoreHomeTotal;
                 
-                if($game->winningPick()=="push"){
+                if($adjustedScore==0){
                     $allResults['TheChicken']['push']++;
 
                     foreach($usersPicks as $user_id=>$userPick){
@@ -249,7 +255,8 @@ die;
                     }
                 }
                 else{
-                    if($game->pickIsWinner($game->chickenPick())){
+                    $winner = ($adjustedScore)>0?"away":"home";
+                    if($winner == $game->chickenPick){
                         $allResults['TheChicken']['win']++;
                     }
                     else{
@@ -258,7 +265,7 @@ die;
                     foreach($usersPicks as $user_id=>$userPick){
                         $user = new User(get_user_by("id",$user_id));
 
-                        if($game->pickIsWinner($userPick[$i])){
+                        if($winner == $userPick[$i]){
                             $allResults[$user_id]['win']++;
                         }
                         else{

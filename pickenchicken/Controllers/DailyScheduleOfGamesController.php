@@ -12,12 +12,17 @@ class DailyScheduleOfGamesController{
         self::post_type();
     }
 
+    public function admin_init(){
+        add_action('save_post', array(self::class,'save'));
+    }
+
+
     private function post_type(){
         register_post_type(
             'daily-schedule',
             array(
                 'labels'                => array(
-                    'name'                     => _x( 'Daly Games Schedules', 'post type general name' ),
+                    'name'                     => _x( 'Daily Games Schedules', 'post type general name' ),
                     'singular_name'            => _x( 'Schedule', 'post type singular name' ),
                     'add_new'                  => _x( 'Add New', 'Schedule' ),
                     'add_new_item'             => __( 'Add new Schedule' ),
@@ -64,5 +69,27 @@ class DailyScheduleOfGamesController{
             )
         );
 
+    }
+
+    public function save($post_id){
+        if ( (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || wp_is_post_revision($post_id) )
+            return $post_id;
+        
+		if( !isset( $_REQUEST[ 'post_title' ] ) ){
+			return $post_id;
+		}
+
+        $pointSpreads = $_REQUEST['point_spread'];
+        $chickenPicks = $_REQUEST['chicken_pick'];
+
+        $schedulePost = new \pickenchicken\Models\DailyScheduleOfGames(get_post($post_id));
+        $games = $schedulePost->getGames();
+        foreach($games as $i=>$game){
+            $game->pointSpread = $pointSpreads[$i];
+            $game->chickenPick = $chickenPicks[$i];
+            $games[$i] = $game;
+        }
+
+        $schedulePost->updateGames( $games );
     }
 }

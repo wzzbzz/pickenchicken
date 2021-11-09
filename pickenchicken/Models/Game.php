@@ -1,12 +1,151 @@
 <?php
-
+/*
+    encapsulates game data as pulled from
+    datafeeds.net free api feed.
+*/
 namespace pickenchicken\Models;
 use bandpress\Models\Model;
 
 class Game extends Model{
-    private $acf_data;
-    public function __construct( $acf_data ){
-        $this->acf_data = $acf_data;
+    
+    private $game_id;
+    private $gameUID;
+    private $type;
+    private $api;
+    private $feedID;
+    private $speed;
+    private $sport;
+    private $league;
+    private $startDate;
+    private $seasonType;
+    private $seasonYear;
+    private $seasonWeek;
+    private $awayTeamAbb;
+    private $awayTeamCity;
+    private $awayTeamName;
+    private $awayTeam;
+    private $homeTeamAbb;
+    private $homeTeamCity;
+    private $homeTeamName;
+    private $homeTeam;
+    private $description;
+    private $venueName;
+    private $venueLocation;
+    private $isLive;
+    private $status;
+    private $period;
+    private $clock;
+    private $scoreAwayTotal;
+    private $scoreHomeTotal;
+    private $scoreAwayPeriod1;
+    private $scoreAwayPeriod2;
+    private $scoreAwayPeriod3;
+    private $scoreAwayPeriod4;
+    private $scoreHomePeriod1;
+    private $scoreHomePeriod2;
+    private $scoreHomePeriod3;
+    private $scoreHomePeriod4;
+    private $nextUpdate;
+    private $checkedData;
+
+
+    public function __construct( ){
+        
+    }
+
+    // setters n getters;
+    
+    public function setGameId( $id ){
+        $this->game_id = $id;
+
+    }
+    public function gameId(){
+        return $this->game_id;
+    }
+    
+    public function setGameUID( $id ){
+        $this->gameUID = $id;
+    }
+
+    public function gameUID(){
+        return $this->gameUID;
+    }
+    
+    public function setType($type){
+        $this->type = $type;
+    }
+
+    public function type(){
+        return $this->type;
+    }
+
+    public function setApi( $api ){
+        $this->api = $api;
+    }
+
+    public function api(){
+        return $this->api;
+    }
+
+    public function setFeedId($feed_id){
+        $this->feedID = $feed_id;
+    }
+
+    public function feedID(){
+        return $this->feedID;
+    }
+
+    public function setSpeed( $speed ){
+        $this->speed = $speed;
+    }
+
+    public function speed(){
+        return $this->speed;
+    }
+
+    public function setSport( $sport ){
+        $this->sport = $sport;
+    }
+
+    public function sport(){
+        return $this->sport();
+    }
+
+    public function setLeague( $league ){
+        $this->league = $league;
+    }
+
+    public function league(){
+        return $this->league();
+    }
+
+    public function setStartDate( $startDate ){
+        // how are we gonna handle this?
+        $this->startDate = $startDate;
+    }
+
+    public function startDate(){
+        return $this->startDate;
+    }
+
+    public function setSeasonType( $type ){
+        $this->seasonType = $type;
+    }
+    
+    public function seasonType(){
+        return $this->seasonType;
+    }
+
+    public function setSeasonYear( $year ){
+        $this->seasonYear = $year;
+    }
+
+    public function seasonYear(){
+        return $this->seasonYear;
+    }
+
+    public function awayTeamAbb(){
+        return $this->awayTeamAbb;
     }
     public function homeTeam(){
         return new Team( $this->acf_data['home_team'] );
