@@ -268,7 +268,7 @@ die;
                 }
             }
         }
-
+        uasort($allResults, array("\pickenchicken\Views\PageViews\DailyPicksView", "sortByWin"));
         ?>
         
         
@@ -286,4 +286,14 @@ die;
         </div>
         <?php
     }
+
+     /* This is the static comparing function: */
+     static function sortByWin($a, $b)
+     {
+         
+         if ($a['win'] == $b['win']) {
+             return 0;
+         }
+         return ($a['win'] < $b['win']) ? +1 : -1;
+     }
 }
