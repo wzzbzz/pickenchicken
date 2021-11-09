@@ -280,6 +280,7 @@ die;
                 }
                 else{
                     $user = new User(get_user_by("ID",$id));
+                    debug($user);
                     $name = $user->display_name();
                 }
             ?>
