@@ -257,7 +257,8 @@ die;
                     }
                     foreach($usersPicks as $user_id=>$userPick){
                         $user = new User(get_user_by("id",$user_id));
-                        echo $user->display_name()." picked ".$game->teamFromHomeAway( $userPick[$i] )->abbreviation()."<br>";
+                        echo $user->display_name()." picked ".$game->teamFromHomeAway( $userPick[$i] )->abbreviation();
+                        echo ($game->pickIsWinner($userPick[$i]))?" WIN<br>":" LOSS<br>";
                         if($game->pickIsWinner($userPick[$i])){
                             $allResults[$user_id]['win']++;
                         }
