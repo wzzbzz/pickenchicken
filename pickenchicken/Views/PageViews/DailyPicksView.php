@@ -270,8 +270,9 @@ die;
                 }
             }
         }
-        diebug($allResults);
+        debug($allResults);
         uasort($allResults, array("\pickenchicken\Views\PageViews\DailyPicksView", "sortByWin"));
+        diebug($allResults);
         ?>
         
         
