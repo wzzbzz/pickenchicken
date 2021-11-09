@@ -241,7 +241,7 @@ die;
                     else{
                         $chickenResults['loss']++;
                     }
-                    debug($userPicks[$i]);
+                    debug($userPicks);
                     if($game->pickIsWinner($userPicks[$i])){
                         $userResults['win']++;
                     }
