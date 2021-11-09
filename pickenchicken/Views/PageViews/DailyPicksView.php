@@ -226,6 +226,7 @@ die;
 
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
         $usersPicks = $this->data->picks();
+        diebug($usersPicks);
         $chickenResults = $userResults =  array("win"=>0,"loss"=>0,"push"=>0);
         $allResults = array();
         $allResults['TheChicken']=array("win"=>0,"loss"=>0,"push"=>0);
@@ -243,8 +244,9 @@ die;
                     $allResults['TheChicken']['push']++;
 
                     foreach($usersPicks as $user_id=>$userPick){
-                        
+
                         $allResults[$user_id]['push']++;
+
                     }
                 }
                 else{
@@ -280,7 +282,6 @@ die;
                 }
                 else{
                     $user = new User(get_user_by("ID",$id));
-                    debug($user);
                     $name = $user->display_name();
                 }
             ?>
