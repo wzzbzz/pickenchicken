@@ -226,7 +226,6 @@ die;
 
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
         $usersPicks = $this->data->picks();
-        diebug($usersPicks);
         $chickenResults = $userResults =  array("win"=>0,"loss"=>0,"push"=>0);
         $allResults = array();
         $allResults['TheChicken']=array("win"=>0,"loss"=>0,"push"=>0);
