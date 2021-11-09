@@ -270,16 +270,19 @@ die;
                 }
             }
         }
-        debug($allResults);
+
         uasort($allResults, array("\pickenchicken\Views\PageViews\DailyPicksView", "sortByWin"));
-        diebug($allResults);
+        
         ?>
         
         
         <div class="container mb-5 h-100">
 
             <?php
+            
             foreach($allResults as $id=>$results):
+                debug($id);
+                debug($results);
                 if($id=="TheChicken"){
                     $name = $id;
                 }
