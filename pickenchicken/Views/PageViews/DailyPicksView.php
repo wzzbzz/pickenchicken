@@ -144,7 +144,6 @@ die;
         <div class="container">
 
             <?php foreach ($this->data->getGames() as $i=>$game): 
-                $disabled = "";//$game->gameStartedInThePast()?"disabled":"";
                 $userPick = $userPicks[$i];
                 $textClass="";
                 $userTeam = $game->teamFromHomeAway($userPick);
@@ -242,6 +241,7 @@ die;
                     else{
                         $chickenResults['loss']++;
                     }
+                    debug($userPicks[$i]);
                     if($game->pickIsWinner($userPicks[$i])){
                         $userResults['win']++;
                     }
