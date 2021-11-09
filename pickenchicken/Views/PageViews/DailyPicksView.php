@@ -231,7 +231,7 @@ die;
         $allResults['TheChicken']=array("win"=>0,"loss"=>0,"push"=>0);
         foreach($this->data->picks() as $id=>$picks){
             $user = new User(get_user_by('ID',$id));
-            $allResults[$user->display_name()]=array("win"=>0,"loss"=>0,"push"=>0);
+            $allResults[$user->id()]=array("win"=>0,"loss"=>0,"push"=>0);
         }
         foreach($this->data->getGames() as $i=>$game){
             
@@ -243,8 +243,8 @@ die;
                     $allResults['TheChicken']['push']++;
 
                     foreach($usersPicks as $user_id=>$userPick){
-                        $user = new User(get_user_by('ID',$user_id));
-                        $allResults[$user->display_name()]['push']++;
+                        
+                        $allResults[$user_id]['push']++;
                     }
                 }
                 else{
@@ -255,12 +255,11 @@ die;
                         $allResults['TheChicken']['loss']++;
                     }
                     foreach($usersPicks as $user_id=>$userPick){
-                        $user = new User(get_user_by('ID',$user_id));
                         if($game->pickIsWinner($userPicks[$i])){
-                            $allResults[$user->display_name()]['win']++;
+                            $allResults[$user_id]['win']++;
                         }
                         else{
-                            $allResults[$user->display_name()]['loss']++;
+                            $allResults[$user_id]['loss']++;
                         }
                         
                     }
@@ -275,7 +274,14 @@ die;
         <div class="container mb-5 h-100">
 
             <?php
-            foreach($allResults as $name=>$results):
+            foreach($allResults as $id=>$results):
+                if($id=="TheChicken"){
+                    $name = $id;
+                }
+                else{
+                    $user = new User(get_user_by("ID",$id));
+                    $name = $user->display_name();
+                }
             ?>
             <div class="row">
                 <div class="col text-center">
