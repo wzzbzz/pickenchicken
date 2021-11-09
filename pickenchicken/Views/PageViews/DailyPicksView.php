@@ -281,8 +281,6 @@ die;
             <?php
             
             foreach($allResults as $id=>$results):
-                debug($id);
-                debug($results);
                 if($id=="TheChicken"){
                     $name = $id;
                 }
