@@ -223,7 +223,9 @@ die;
     }
 
     public function renderScoreboard(){
-        
+
+        $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
+
         $chickenResults = $userResults = array("win"=>0,"loss"=>0,"push"=>0);
         foreach($this->data->getGames() as $i=>$game){
             
@@ -241,7 +243,6 @@ die;
                     else{
                         $chickenResults['loss']++;
                     }
-                    debug($userPicks);
                     if($game->pickIsWinner($userPicks[$i])){
                         $userResults['win']++;
                     }
