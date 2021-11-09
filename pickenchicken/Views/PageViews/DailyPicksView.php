@@ -21,72 +21,7 @@ class DailyPicksView extends View{
             $this->renderScoreboard();    
             $this->renderGames();
         }
-die;
-        $chickenResults = $userResults = array("win"=>0,"loss"=>0,"push"=>0);
-        foreach($games as $i=>$game){
-            
-            //$allGamesStarted = $allGamesStarted && $game->gameStartedInThePast();
-            $allGamesFinished = $allGamesStarted && $game->gameIsDecided();
-            if($game->gameIsDecided()){
-                if($game->winningPick()=="push"){
-                    $chickenResults['push']++;
-                    $userResults['push']++;
-                }
-                else{
-                    if($game->pickIsWinner($game->chickenPick())){
-                        $chickenResults['win']++;
-                    }
-                    else{
-                        $chickenResults['loss']++;
-                    }
-                    if($game->pickIsWinner($userPicks[$i])){
-                        $userResults['win']++;
-                    }
-                    else{
-                        $userResults['loss']++;
-                    }
-                }
-            }
-        }
-
-        ?>
         
-        
-        <div class="container mb-5">
-            <div class="row">
-                <div class="col text-center">
-                    <h6>Your results: <?= $userResults['win'] . "-".$userResults['loss']."-".$userResults['push']?></h6>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col text-center">
-                    <h6>Chicken's results: <?= $chickenResults['win'] . "-".$chickenResults['loss']."-".$chickenResults['push']?></h6>
-                </div>
-            </div>
-            <?php if ($allGamesFinished):
-            if($userResults['win']>$chickenResults['win']){
-                $text = "You plucked the chicken!";
-                $textClass="text-success";
-            }
-            elseif($userResults['win']<$chickenResults['win']){
-                $text = "You got pecked by the chicken!";
-                $textClass="text-danger";
-            }
-            else{
-                $text="You equaled a chicken.";
-                $textClass="text-danger";
-            }
-                
-            ?>
-            <div class="row">
-            <div class="col text-center">
-                <h6 class="<?=$textClass;?>"><?=$text?></h6>
-            </div>
-            </div>
-            <?php endif;?>
-        </div>
-        
-        <?php
     }
 
     public function renderIntro(){
