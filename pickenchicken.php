@@ -13,6 +13,7 @@ class PickenChicken {
         register_deactivation_hook( __FILE__ , array($this, 'deactivate' ) );
 
         add_action('init',array($this,'init'));
+        add_action('admin_init',array($this,'admin_init'));
     }
 
     public function activate(){
@@ -45,9 +46,20 @@ class PickenChicken {
         add_action("wp",array(self::class, "setPage"));
     }
 
+    public function admin_init(){
+        add_meta_box(
+            'pickenchicken_dailygamesbox',                 // Unique ID
+            'Today\'s Games',      // Box title
+            array('\\pickenchicken\\Views\\AdminViews\\DailyScheduleAdminView','renderDailyScheduleForm'),  // Content callback, must be of type callable
+            'daily-schedule'// Post type
+        );
+        \pickenchicken\Controllers\DailyScheduleOfGamesController::admin_init();
+    }
+
     private function rewrites(){
         add_rewrite_rule("^pickenchicken/?$", "index.php?package=pickenchicken&pagename=home", "top");
         add_rewrite_rule("^actions/dailyPicks/?$", "index.php?package=pickenchicken&action=dailyPicks", "top");
+        add_rewrite_rule("^actions/refreshGamesFeed/?$", "index.php?package=pickenchicken&action=refreshGamesFeed", "top");
     }
 
     public function setPage(){
@@ -61,6 +73,7 @@ class PickenChicken {
             default:
                 $args = array('numberposts'=>1, 'post_type'=>'daily-schedule');
                 $post = get_posts($args)[0];
+                $post = get_post(191);
                 $schedule = new \pickenchicken\Models\DailyScheduleOfGames( $post );
                 $view = new \pickenchicken\Views\PageViews\DailyPicksView( $schedule );              
                 app()->setCurrentView($view);
