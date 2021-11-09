@@ -47,6 +47,7 @@ class refreshGamesFeedAction{
             $schedule->updateGamesFromFeed($games);
 
         }
-        die;
+        update_option("last_feed_cron_time",time());
+        die(get_option("last_feed_cron_time"));
     }
 }
