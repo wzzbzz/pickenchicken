@@ -256,7 +256,8 @@ die;
                         $allResults['TheChicken']['loss']++;
                     }
                     foreach($usersPicks as $user_id=>$userPick){
-                        diebug($userPick);
+                        $user = new User(get_user_by("id",$id));
+                        echo $user->display_name()." picked ".$game->teamFromHomeAway( $userPick[$i])."<br>";
                         if($game->pickIsWinner($userPick[$i])){
                             $allResults[$user_id]['win']++;
                         }
@@ -269,6 +270,7 @@ die;
                 }
             }
         }
+        die;
         uasort($allResults, array("\pickenchicken\Views\PageViews\DailyPicksView", "sortByWin"));
         ?>
         
