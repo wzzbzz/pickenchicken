@@ -2,7 +2,7 @@
 namespace pickenchicken\Views\PageViews;
 
 use \bandpress\Views\View;
-
+use \pickenchicken\Models\User;
 class DailyPicksView extends View{
 
     public function renderBody(){
@@ -225,30 +225,46 @@ die;
     public function renderScoreboard(){
 
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
-
-        $chickenResults = $userResults = array("win"=>0,"loss"=>0,"push"=>0);
+        $usersPicks = $this->data->picks();
+        $chickenResults = $userResults =  array("win"=>0,"loss"=>0,"push"=>0);
+        $allResults = array();
+        $allResults['TheChicken']=array("win"=>0,"loss"=>0,"push"=>0);
+        foreach($this->data->picks() as $id=>$picks){
+            $user = new User(get_user_by('ID',$id));
+            $allResults[$user->display_name()]=array("win"=>0,"loss"=>0,"push"=>0);
+        }
         foreach($this->data->getGames() as $i=>$game){
             
             //$allGamesStarted = $allGamesStarted && $game->gameStartedInThePast();
-            $allGamesFinished = $allGamesStarted && $game->gameIsDecided();
+            
             if($game->gameIsDecided()){
+                
                 if($game->winningPick()=="push"){
-                    $chickenResults['push']++;
-                    $userResults['push']++;
+                    $allResults['TheChicken']['push']++;
+
+                    foreach($usersPicks as $user_id=>$userPick){
+                        $user = new User(get_user_by('ID',$user_id));
+                        $allResults[$user->display_name()]['push']++;
+                    }
                 }
                 else{
                     if($game->pickIsWinner($game->chickenPick())){
-                        $chickenResults['win']++;
+                        $allResults['TheChicken']['win']++;
                     }
                     else{
-                        $chickenResults['loss']++;
+                        $allResults['TheChicken']['loss']++;
                     }
-                    if($game->pickIsWinner($userPicks[$i])){
-                        $userResults['win']++;
+                    foreach($usersPicks as $user_id=>$userPick){
+                        $user = new User(get_user_by('ID',$user_id));
+                        if($game->pickIsWinner($userPicks[$i])){
+                            $allResults[$user->display_name()]['win']++;
+                        }
+                        else{
+                            $allResults[$user->display_name()]['loss']++;
+                        }
+                        
                     }
-                    else{
-                        $userResults['loss']++;
-                    }
+                   
                 }
             }
         }
@@ -256,38 +272,18 @@ die;
         ?>
         
         
-        <div class="container mb-5">
-            <div class="row">
-                <div class="col text-center">
-                    <h6>Your results: <?= $userResults['win'] . "-".$userResults['loss']."-".$userResults['push']?></h6>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col text-center">
-                    <h6>Chicken's results: <?= $chickenResults['win'] . "-".$chickenResults['loss']."-".$chickenResults['push']?></h6>
-                </div>
-            </div>
-            <?php if ($allGamesFinished):
-            if($userResults['win']>$chickenResults['win']){
-                $text = "You plucked the chicken!";
-                $textClass="text-success";
-            }
-            elseif($userResults['win']<$chickenResults['win']){
-                $text = "You got pecked by the chicken!";
-                $textClass="text-danger";
-            }
-            else{
-                $text="You equaled a chicken.";
-                $textClass="text-danger";
-            }
-                
+        <div class="container mb-5 h-100">
+
+            <?php
+            foreach($allResults as $name=>$results):
             ?>
             <div class="row">
-            <div class="col text-center">
-                <h6 class="<?=$textClass;?>"><?=$text?></h6>
+                <div class="col text-center">
+                    <h6><?=$name;?>: <?= $results['win'] . "-".$results['loss']."-".$results['push']?></h6>
+                </div>
             </div>
-            </div>
-            <?php endif;?>
+            <?php endforeach;?>
+        </div>
         <?php
     }
 }
