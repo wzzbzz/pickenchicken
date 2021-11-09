@@ -257,6 +257,7 @@ die;
                         $allResults['TheChicken']['loss']++;
                     }
                     foreach($usersPicks as $user_id=>$userPick){
+                        diebug($userPick);
                         if($game->pickIsWinner($userPick[$i])){
                             $allResults[$user_id]['win']++;
                         }
