@@ -73,7 +73,6 @@ class PickenChicken {
             default:
                 $args = array('numberposts'=>1, 'post_type'=>'daily-schedule');
                 $post = get_posts($args)[0];
-                $post = get_post(191);
                 $schedule = new \pickenchicken\Models\DailyScheduleOfGames( $post );
                 $view = new \pickenchicken\Views\PageViews\DailyPicksView( $schedule );              
                 app()->setCurrentView($view);
