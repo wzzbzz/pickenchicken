@@ -106,10 +106,11 @@ class DailyPicksView extends View{
             
             <div class="row mb-3 justify-content-center">
                 <div class="col text-center" id="away">
-                
+                <?php if ($game->status=="Live"):?>
+                <strong><?=$game->scoreAwayTotal;?></strong>
+                <?php endif;?>
                 </div>
                 <div class="col text-center">
-                <div><?= $game->status; ?>
                 <?php if ($game->status=="Completed"):?>
                 <div><?php echo $game->scoreAwayTotal;?> - <?php echo $game->scoreHomeTotal;?></div>
                 <?php
@@ -153,7 +154,9 @@ class DailyPicksView extends View{
                     <div class="chickenPickResult">Chicken Picked <span class='<?=$textClass;?>'><?=$chickenTeam?></span></div>
                 </div>
                  <div class="col text-center" id="home">
-                
+                 <?php if ($game->status=="Live"):?>
+                <strong><?=$game->scoreHomeTotal;?></strong>
+                <?php endif;?>
                 </div>
             </div>
 
