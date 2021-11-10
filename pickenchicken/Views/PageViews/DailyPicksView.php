@@ -109,7 +109,7 @@ class DailyPicksView extends View{
                 
                 </div>
                 <div class="col text-center">
-                <div><?= $game->status; ?>
+                <div><?= $game->checkedDate; ?>
                 <?php if ($game->status=="Completed"):?>
                 <div><?php echo $game->scoreAwayTotal;?> - <?php echo $game->scoreHomeTotal;?></div>
                 <?php
