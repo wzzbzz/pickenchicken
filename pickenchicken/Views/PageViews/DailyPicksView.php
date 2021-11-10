@@ -17,9 +17,13 @@ class DailyPicksView extends View{
 
         $this->renderIntro();
 
-        if($this->data->gamesHaveStarted())
+        if($this->data->gamesHaveStarted()){
             $this->renderTodayScoreboard();
+        }
 
+        else{
+            $this->renderTodaysPlayers();
+        }
         if(empty($userPicks)){
             $this->renderPicksForm();
             
@@ -50,6 +54,27 @@ class DailyPicksView extends View{
             </p>
                 <div class="collapse" id="previousDayResults">
                 <?php $yesterdayScoreboard->render();?>
+                </div>
+        </div>
+        <?php
+    }
+
+    public function renderTodaysPlayers(){
+        $playersList = new \pickenchicken\Views\ComponentViews\PlayersList( $this->data );
+        $count = count($this->data->players());
+        if(0==$count){
+            return;
+        }
+        ?>
+        <div class="container text-center">
+            <p>
+
+                <button class="btn  btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#todaysRoster" aria-expanded="false" aria-controls="todaysRoster">
+                    Today's Roster (<?=$count;?>)
+                </button>
+            </p>
+                <div class="collapse" id="todaysRoster">
+                <?php $playersList->render();?>
                 </div>
         </div>
         <?php

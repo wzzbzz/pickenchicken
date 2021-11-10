@@ -2,6 +2,7 @@
 
 namespace pickenchicken\Models;
 use bandpress\Models\Post;
+use pickenchicken\Models\User;
 
 class DailyScheduleOfGames extends Post{
   
@@ -45,6 +46,13 @@ class DailyScheduleOfGames extends Post{
         return $this->get_meta("picks",true);
     }
 
+    public function players(){
+        $players = [];
+        foreach($this->picks() as $player=>$picks){
+            $players[] = new User(get_user_by("ID",$player));
+        }
+        return $players;
+    }
     public function previousDay(){
         $sql = "SELECT * from wp_posts 
                     WHERE post_date < '{$this->date()}' 
