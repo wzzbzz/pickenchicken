@@ -31,7 +31,8 @@ class refreshGamesFeedAction{
             $post = \bandpress\Models\Posts::getPostByTitle($date,'daily-schedule');
             // if there's no post, create one.
             if(empty($post)){
-                $post_date = date("Y-m-d h:i:s",strtotime($date));
+                $post_date = date("Y-m-d 03:00:00",strtotime($date));
+                
                 $status=(strtotime($post_date)<time())?"publish":"future";
                 $args = [
                     'post_title'=>$date,

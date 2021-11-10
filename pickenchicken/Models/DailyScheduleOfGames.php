@@ -4,16 +4,7 @@ namespace pickenchicken\Models;
 use bandpress\Models\Post;
 
 class DailyScheduleOfGames extends Post{
-    public function getGames2(){
-        //TBD - create "game" object and return array;
-        //tbd rename field to "games"
-        $games = [];
-        foreach($this->get_field("game") as $game){
-            $games[] = new Game($game);
-        }
-        return $games;
-    }
-
+  
     public function updateGamesFromFeed($data){
         $games = $this->getGames();
 
@@ -52,6 +43,30 @@ class DailyScheduleOfGames extends Post{
 
     public function picks(){
         return $this->get_meta("picks",true);
+    }
+
+    public function previousDay(){
+        $sql = "SELECT * from wp_posts 
+                    WHERE post_date < '{$this->date()}' 
+                AND post_status='publish' 
+                AND post_type='daily-schedule'
+                ORDER BY post_date DESC
+                LIMIT 1";
+        $results = $this->get_results($sql);
+        if(empty($results)){
+            return false;
+        }
+        $post = new DailyScheduleOfGames($results[0]);
+        return $post;
+    }
+
+    public function gamesHaveStarted(){
+        $games = $this->getGames();
+        $started=false;
+        foreach($games as $game){
+            $started = $started || $game->status!='Unplayed';
+        }
+        return $started;
     }
 
     

@@ -3,6 +3,7 @@ namespace pickenchicken\Views\PageViews;
 
 use \bandpress\Views\View;
 use \pickenchicken\Models\User;
+use \pickenchicken\Views\ComponentViews\Scoreboard;
 class DailyPicksView extends View{
 
     public function renderBody(){
@@ -10,15 +11,20 @@ class DailyPicksView extends View{
         $allGamesFinished = $allGamesStarted = false;
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
 
+        // show yesterday's scoreboard
+        $this->renderYesterdayScoreboard();
+
+
         $this->renderIntro();
 
+        if($this->data->gamesHaveStarted())
+            $this->renderTodayScoreboard();
+
         if(empty($userPicks)){
-            
             $this->renderPicksForm();
             
         }
         else{
-            $this->renderScoreboard();    
             $this->renderGames();
         }
         
@@ -32,6 +38,41 @@ class DailyPicksView extends View{
 
     }
 
+    public function renderYesterdayScoreboard(){
+        $yesterdayScoreboard = new Scoreboard($this->data->previousDay());
+        ?>
+        <div class="container text-center">
+            <p>
+
+                <button class="btn  btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#previousDayResults" aria-expanded="false" aria-controls="previousDayResults">
+                    Yesterday's Results
+                </button>
+            </p>
+                <div class="collapse" id="previousDayResults">
+                <?php $yesterdayScoreboard->render();?>
+                </div>
+        </div>
+        <?php
+    }
+    public function renderTodayScoreboard(){
+        
+        $todayScoreboard = new Scoreboard($this->data);
+
+        ?>
+        <div class="container text-center">
+            <p>
+
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#todayResults" aria-expanded="false" aria-controls="todayResults">
+                    Today's Results
+                </button>
+            </p>
+
+            <div class="collapse" id="todayResults">
+                <?php $todayScoreboard->render();?>
+            </div>
+        </div>
+        <?php
+    }
     public function renderPicksForm(){
         $games = $this->data->getGames();
 
@@ -169,6 +210,9 @@ class DailyPicksView extends View{
 
     public function renderScoreboard(){
 
+        $scoreboard = new Scoreboard( $this->data );
+        $scoreboard->render();
+        return;
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
         $usersPicks = $this->data->picks();
         $chickenResults = $userResults =  array("win"=>0,"loss"=>0,"push"=>0);
