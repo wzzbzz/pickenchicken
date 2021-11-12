@@ -14,6 +14,8 @@ class DailyPicksView extends View{
         // message from the chicken 11/11/2021
         $this->renderSpecial();
 
+        //$this->renderLiveStream();
+
         // show yesterday's scoreboard
         $this->renderYesterdayScoreboard();
 
@@ -37,8 +39,23 @@ class DailyPicksView extends View{
         
     }
 
+    public function renderLiveStream(){
+        ?>
+        <div class="container text-center">
+            <p>
+
+                <button class="btn  btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#livestream" aria-expanded="false" aria-controls="livestream">
+                    LIVE
+                </button>
+            </p>
+                <div class="collapse pb-3" id="livestream">
+                    <iframe SRC='http://desistreams.tv/embed/nba.php' width='650' height='470' marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling='no'><p> www.letembeds.blogspot.com </p></iframe>
+                    </div>
+                </div>
+        <?php
+    }
     public function renderSpecial(){
-        $image = \bandpress\Models\PostsFactory::fromID(157);
+        //$image = \bandpress\Models\PostsFactory::fromID(157);
 
         ?>
          <div class="container text-center">
