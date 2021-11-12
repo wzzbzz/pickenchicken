@@ -12,7 +12,7 @@ class DailyPicksView extends View{
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
 
         // message from the chicken 11/11/2021
-        $this->renderSpecial();
+        //$this->renderSpecial();
 
         //$this->renderLiveStream();
 
