@@ -4,6 +4,7 @@ namespace pickenchicken\Views\PageViews;
 use \bandpress\Views\View;
 use \pickenchicken\Models\User;
 use \pickenchicken\Views\ComponentViews\Scoreboard;
+
 class DailyPicksView extends View{
 
     public function renderBody(){
@@ -12,7 +13,7 @@ class DailyPicksView extends View{
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
 
         // message from the chicken 11/11/2021
-        //$this->renderSpecial();
+        $this->renderSpecial();
 
         //$this->renderLiveStream();
 
@@ -66,7 +67,7 @@ class DailyPicksView extends View{
                 </button>
             </p>
                 <div class="collapse pb-3" id="special">
-                    <img src="http://www.forktheinternet.com/wp-content/uploads/2021/11/IMG_36771.jpg" width="200" alt="">
+                    <img src="http://www.forktheinternet.com/wp-content/uploads/2021/11/256631563_418398739901895_6915038334057835308_n.jpeg" width="200" alt="">
                 </div>
         </div>
         <?php
