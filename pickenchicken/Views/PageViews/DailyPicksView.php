@@ -1,7 +1,7 @@
 <?php
 namespace pickenchicken\Views\PageViews;
 
-use \bandpress\Views\View;
+use \pickenchicken\Views\View;
 use \pickenchicken\Models\User;
 use \pickenchicken\Views\ComponentViews\Scoreboard;
 
@@ -13,7 +13,7 @@ class DailyPicksView extends View{
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
 
         // message from the chicken 11/11/2021
-        $this->renderSpecial();
+        //$this->renderSpecial();
 
         //$this->renderLiveStream();
 
@@ -141,7 +141,7 @@ class DailyPicksView extends View{
 
 ?>
 <div class="container">
-            <form action="actions/dailyPicks" method="post">
+            <form action="pickenchicken/actions/dailyPicks" method="post">
             <input type="hidden" name="postId" value="<?= $this->data->id();?>"/>
             <?php foreach ($games as $i=>$game): 
 ?>
