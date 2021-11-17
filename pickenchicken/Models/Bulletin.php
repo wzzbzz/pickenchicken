@@ -15,7 +15,13 @@ class Bulletin extends Post
     }
     public function getMedia()
     {
-        return new File(get_post($this->get_field("media")));
+        if(!empty($this->get_field("media")))
+            return new File(get_post($this->get_field("media")));
+        else return false;
+    }
+
+    public function hasMedia(){
+        return !empty($this->getMedia());
     }
     public function setMessage($text)
     {
@@ -48,6 +54,8 @@ class Bulletin extends Post
     }
 
     public function getMediaView(){
+        if(empty($this->mediaView()))
+            return false;
         $viewClass = "\\bandpress\\Views\\ComponentViews\\".ucfirst($this->getMedia()->mediaType())."View";
         $mediaView = new $viewClass($this->getMedia());
         return $mediaView;

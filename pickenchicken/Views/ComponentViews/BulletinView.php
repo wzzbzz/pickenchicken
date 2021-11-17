@@ -17,7 +17,7 @@ class BulletinView{
             </button>
             </p>
             <div class="collapse pb-3" id="bulletin">
-                <?php $this->data->getMediaView()->render();?>
+                <?php if($this->data->hasMedia()) $this->data->getMediaView()->render();?>
                 <div class="text-center">
                 <?= $this->data->getMessage();?>
                  </div>
