@@ -46,22 +46,6 @@ class DailyScheduleOfGamesController{
                 'show_ui'               => true,
                 'show_in_menu'          => true,
                 'rewrite'               => false,
-                //'show_in_rest'          => true,
-                //'rest_base'             => 'blocks',
-                //'rest_controller_class' => 'WP_REST_Blocks_Controller',
-                //'capability_type'       => 'block',
-                /*'capabilities'          => array(
-                    // You need to be able to edit posts, in order to read blocks in their raw form.
-                    'read'                   => 'edit_posts',
-                    // You need to be able to publish posts, in order to create blocks.
-                    'create_posts'           => 'publish_posts',
-                    'edit_posts'             => 'edit_posts',
-                    'edit_published_posts'   => 'edit_published_posts',
-                    'delete_published_posts' => 'delete_published_posts',
-                    'edit_others_posts'      => 'edit_others_posts',
-                    'delete_others_posts'    => 'delete_others_posts',
-                ),*/
-                //'map_meta_cap'          => true,
                 'supports'              => array(
                     'title',
                     'thumbnail'

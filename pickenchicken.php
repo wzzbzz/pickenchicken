@@ -14,6 +14,8 @@ class PickenChicken {
 
         add_action('init',array($this,'init'));
         add_action('admin_init',array($this,'admin_init'));
+
+
     }
 
     public function activate(){
@@ -31,6 +33,7 @@ class PickenChicken {
 
         update_option("root_paths",$paths);
 
+        add_role("chicken", "The Chicken");
     }
 
     public function deactivate(){
@@ -40,8 +43,13 @@ class PickenChicken {
     }
 
     public function init(){
-        \pickenchicken\Controllers\TeamsController::init();
+
+        self::capabilities();
+
+        // Post types 
         \pickenchicken\Controllers\DailyScheduleOfGamesController::init();
+        \pickenchicken\Controllers\BulletinsController::init();
+
         self::rewrites();
         add_action("wp",array(self::class, "setPage"));
     }
@@ -57,24 +65,58 @@ class PickenChicken {
     }
 
     private function rewrites(){
+
         add_rewrite_rule("^pickenchicken/?$", "index.php?package=pickenchicken&pagename=home", "top");
-        add_rewrite_rule("^actions/dailyPicks/?$", "index.php?package=pickenchicken&action=dailyPicks", "top");
-        add_rewrite_rule("^actions/refreshGamesFeed/?$", "index.php?package=pickenchicken&action=refreshGamesFeed", "top");
+        add_rewrite_rule("^pickenchicken/composeBulletin/?$", "index.php?package=pickenchicken&pagename=composebulletin", "top");
+        add_rewrite_rule("^pickenchicken/bulletins/([^\/]+)?$", "index.php?package=pickenchicken&pagename=editBulletin&post_id=\$matches[1]", "top");
+        add_rewrite_rule("^pickenchicken/actions/dailyPicks/?$", "index.php?package=pickenchicken&action=dailyPicks", "top");
+        add_rewrite_rule("^pickenchicken/actions/submitBulletin/?$", "index.php?package=pickenchicken&action=submitBulletin", "top");
+        add_rewrite_rule("^pickenchicken/actions/refreshGamesFeed/?$", "index.php?package=pickenchicken&action=refreshGamesFeed", "top");
     }
 
+    private function capabilities(){
+        
+        $role = get_role("administrator");
+        $role->add_cap("send_bulletins");
+        $role->add_cap("access_admin");
+
+        $role = get_role("chicken");
+        $role->add_cap("send_bulletins");
+
+    }
     public function setPage(){
+
         $package = get_query_var('package');
         $pagename = get_query_var('pagename');
+        
         if('pickenchicken' !== $package)
             return;
-        
+
         switch ($pagename){
+            case 'composebulletin':
+                if(current_user_can('send_bulletins'))
+                    $view = new \pickenchicken\Views\PageViews\ComposeBulletinView();
+                else
+                    $view = new \bandpress\Views\PageViews\ErrorPageView(404);
+                app()->setCurrentView($view);
+                break;
+            case "editbulletin":
+                if(current_user_can('send_bulletins')){
+                    $post = get_post(get_query_var("post_id"));
+                    $bulletin = new \pickenchicken\Models\Bulletin( $post );
+                    $view = new \pickenchicken\Views\PageViews\EditBulletinView( $bulletin );
+                }
+                else
+                    $view = new \bandpress\Views\PageViews\ErrorPageView(404);
+                    app()->setCurrentView($view);
+                
+                break;
             case 'home':
             default:
                 $args = array('numberposts'=>1, 'post_type'=>'daily-schedule');
                 $post = get_posts($args)[0];
                 $schedule = new \pickenchicken\Models\DailyScheduleOfGames( $post );
-                $view = new \pickenchicken\Views\PageViews\DailyPicksView( $schedule );              
+                $view = new \pickenchicken\Views\PageViews\DailyPicksView( $schedule );
                 app()->setCurrentView($view);
                 break;
         }
