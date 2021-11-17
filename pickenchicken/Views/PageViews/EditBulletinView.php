@@ -24,7 +24,7 @@ class EditBulletinView extends \pickenchicken\Views\View{
                             $scheme = $this->data->getColorScheme();
                             ?>
                             <button class="btn  btn-<?= $scheme['bg']?>" type="button" data-bs-toggle="collapse" data-bs-target="#special" aria-expanded="false" aria-controls="special">
-                                SPECIAL MESSAGE
+                                <?= $this->data->getButtonText();?>
                             </button>
                         </div>
                     </div>
