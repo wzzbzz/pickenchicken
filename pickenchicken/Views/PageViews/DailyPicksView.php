@@ -13,7 +13,7 @@ class DailyPicksView extends View{
         $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
 
         // message from the chicken 11/11/2021
-        $this->renderSpecial();
+        $this->renderBulletins();
 
         //$this->renderLiveStream();
 
@@ -55,22 +55,14 @@ class DailyPicksView extends View{
                 </div>
         <?php
     }
-    public function renderSpecial(){
-        //$image = \bandpress\Models\PostsFactory::fromID(157);
-
-        ?>
-         <div class="container text-center">
-            <p>
-
-                <button class="btn  btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#special" aria-expanded="false" aria-controls="special">
-                    SPECIAL MESSAGE
-                </button>
-            </p>
-                <div class="collapse pb-3" id="special">
-                    <img src="http://www.forktheinternet.com/wp-content/uploads/2021/11/256631563_418398739901895_6915038334057835308_n.jpeg" width="200" alt="">
-                </div>
-        </div>
-        <?php
+    public function renderBulletins(){
+        $bulletins = new \pickenchicken\Models\Bulletins();
+        if($bulletin = $bulletins->getLatest()){
+            $view = new \pickenchicken\Views\ComponentViews\BulletinView( $bulletin );
+            $view->render();
+        }
+        
+        
     }
     public function renderIntro(){
         ?>

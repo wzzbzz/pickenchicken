@@ -46,4 +46,10 @@ class Bulletin extends Post
     {
         return $this->get_meta("buttonText",true);
     }
+
+    public function getMediaView(){
+        $viewClass = "\\bandpress\\Views\\ComponentViews\\".ucfirst($this->getMedia()->mediaType())."View";
+        $mediaView = new $viewClass($this->getMedia());
+        return $mediaView;
+    }
 }
