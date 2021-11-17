@@ -54,7 +54,7 @@ class Bulletin extends Post
     }
 
     public function getMediaView(){
-        if(empty($this->mediaView()))
+        if(empty($this->hasMedia()))
             return false;
         $viewClass = "\\bandpress\\Views\\ComponentViews\\".ucfirst($this->getMedia()->mediaType())."View";
         $mediaView = new $viewClass($this->getMedia());
