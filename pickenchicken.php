@@ -80,6 +80,7 @@ class PickenChicken {
         $role->add_cap("send_bulletins");
         $role->add_cap("access_admin");
 
+        add_role("chicken", "The Chicken");
         $role = get_role("chicken");
         $role->add_cap("send_bulletins");
 
