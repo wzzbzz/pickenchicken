@@ -4,7 +4,7 @@ namespace pickenchicken\Actions;
 
 use \pickenchicken\Models\Bulletin;
 
-class SubmitBulletinAction extends \bandpress\Actions\UploadAction
+class SubmitBulletinAction extends \vinepress\Actions\UploadAction
 {
     public function __construct()
     {

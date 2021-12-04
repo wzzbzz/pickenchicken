@@ -3,10 +3,6 @@ namespace pickenchicken\Controllers;
 
 class BulletinsController{
 
-    public function __construct(){}
-
-    public function __destruct(){}
-
     public function init(){
         self::post_type();
     }
@@ -36,7 +32,7 @@ class BulletinsController{
                     'item_published'           => __( 'Bulletin published.' ),
                     'item_published_privately' => __( 'Bulletin published privately.' ),
                     'item_reverted_to_draft'   => __( 'Bulletin reverted to draft.' ),
-                    'item_Bulletind'           => __( 'Bulletin Bulletind.' ),
+                    'item_scheduled'           => __( 'Bulletin Scheduled.' ),
                     'item_updated'             => __( 'Bulletin updated.' ),
                 ),
                 'public'                => false,

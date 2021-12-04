@@ -2,9 +2,9 @@
 
 namespace pickenchicken\Models;
 
-use bandpress\Models\Post;
+use vinepress\Models\Post;
 use pickenchicken\Models\User;
-use bandpress\Models\File;
+use vinepress\Models\File;
 
 class Bulletin extends Post
 {
@@ -56,7 +56,7 @@ class Bulletin extends Post
     public function getMediaView(){
         if(empty($this->hasMedia()))
             return false;
-        $viewClass = "\\bandpress\\Views\\ComponentViews\\".ucfirst($this->getMedia()->mediaType())."View";
+        $viewClass = "\\vinepress\\Views\\ComponentViews\\".ucfirst($this->getMedia()->mediaType())."View";
         $mediaView = new $viewClass($this->getMedia());
         return $mediaView;
     }

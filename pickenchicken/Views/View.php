@@ -2,7 +2,7 @@
 
 namespace pickenchicken\Views;
 
-class View extends \bandpress\Views\View{
+class View extends \vinepress\Views\View{
 
     public function __construct( $data = null){
 

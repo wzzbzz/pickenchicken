@@ -35,7 +35,7 @@ class refreshGamesFeedAction
         }
 
         foreach ($dailySchedule as $date => $games) {
-            $post = \bandpress\Models\Posts::getPostByTitle($date, 'daily-schedule');
+            $post = \vinepress\Models\Posts::getPostByTitle($date, 'daily-schedule');
             // if there's no post, create one.
             if (empty($post)) {
                 $post_date = date("Y-m-d 03:00:00", strtotime($date));

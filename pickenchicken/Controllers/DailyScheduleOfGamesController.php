@@ -13,7 +13,18 @@ class DailyScheduleOfGamesController{
     }
 
     public function admin_init(){
+        // save the post 
         add_action('save_post', array(self::class,'save'));
+
+        // add the meta box
+        add_meta_box(
+            'pickenchicken_dailygamesbox',                 // Unique ID
+            'Today\'s Games',      // Box title
+            array('\\pickenchicken\\Views\\AdminViews\\DailyScheduleAdminView','renderDailyScheduleForm'),  // Content callback, must be of type callable
+            'daily-schedule'// Post type
+        );
+
+
     }
 
 

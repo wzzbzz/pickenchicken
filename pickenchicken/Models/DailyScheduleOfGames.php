@@ -1,8 +1,8 @@
 <?php
 
 namespace pickenchicken\Models;
-use bandpress\Models\Post;
-use pickenchicken\Models\User;
+use vinepress\Models\Post;
+use pickenchicken\Models\Player;
 
 class DailyScheduleOfGames extends Post{
   
@@ -26,7 +26,7 @@ class DailyScheduleOfGames extends Post{
         $this->update_meta("games",$games);
     }
 
-    public function setUserPicks($user_id, $user_picks){
+    public function setPlayerPicks($user_id, $user_picks){
         $picks = $this->picks();
         if(!is_array($picks)){
             $picks=array();
@@ -38,7 +38,7 @@ class DailyScheduleOfGames extends Post{
         $this->update_meta("picks", $picks);
     }
 
-    public function getUserPicks($user_id){
+    public function getPlayerPicks($user_id){
         return $this->picks()[$user_id];
     }
 
@@ -49,7 +49,7 @@ class DailyScheduleOfGames extends Post{
     public function players(){
         $players = [];
         foreach($this->picks() as $player=>$picks){
-            $players[] = new User(get_user_by("ID",$player));
+            $players[] = new Player(get_user_by("ID",$player));
         }
         return $players;
     }

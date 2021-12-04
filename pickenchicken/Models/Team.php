@@ -2,7 +2,7 @@
 
 namespace pickenchicken\Models;
 
-use \bandpress\Models\Post;
+use \vinepress\Models\Post;
 
 class Team extends Post{
     

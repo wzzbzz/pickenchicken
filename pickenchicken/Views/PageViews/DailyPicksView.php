@@ -2,7 +2,7 @@
 namespace pickenchicken\Views\PageViews;
 
 use \pickenchicken\Views\View;
-use \pickenchicken\Models\User;
+use \pickenchicken\Models\Player;
 use \pickenchicken\Views\ComponentViews\Scoreboard;
 
 class DailyPicksView extends View{
@@ -10,8 +10,8 @@ class DailyPicksView extends View{
     public function renderBody(){
         
         $allGamesFinished = $allGamesStarted = false;
-        $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
-
+        $userPicks = $this->data->getPlayerPicks(app()->currentUser()->id());
+        
         // message from the chicken 11/11/2021
         $this->renderBulletins();
 
@@ -169,7 +169,7 @@ class DailyPicksView extends View{
     }
 
     private function renderGames(){
-       $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
+       $userPicks = $this->data->getPlayerPicks(app()->currentUser()->id());
         ?>
         <div class="container">
 
@@ -268,7 +268,7 @@ class DailyPicksView extends View{
         $scoreboard = new Scoreboard( $this->data );
         $scoreboard->render();
         return;
-        $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
+        $userPicks = $this->data->getPlayerPicks(app()->currentUser()->id());
         $usersPicks = $this->data->picks();
         $chickenResults = $userResults =  array("win"=>0,"loss"=>0,"push"=>0);
         $allResults = array();

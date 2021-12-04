@@ -1,22 +1,27 @@
 <?php
 
 namespace pickenchicken\Views\ComponentViews;
-use \pickenchicken\Models\User;
+use \pickenchicken\Models\Player;
 
 class Scoreboard{
+    
     private $data;
+
     public function __construct( $data ){
         $this->data = $data;
     }
+
     public function render(){
-        $userPicks = $this->data->getUserPicks(app()->currentUser()->id());
-        $usersPicks = $this->data->picks();
-        $chickenResults = $userResults =  array("win"=>0,"loss"=>0,"push"=>0);
+
+        $playerPicks = $this->data->getPlayerPicks(app()->currentUser()->id());
+        $playersPicks = $this->data->picks();
+        
+        $chickenResults = $playerResults =  array("win"=>0,"loss"=>0,"push"=>0);
         $allResults = array();
         $allResults['TheChicken']=array("win"=>0,"loss"=>0,"push"=>0);
         foreach($this->data->picks() as $id=>$picks){
-            $user = new User(get_user_by('ID',$id));
-            $allResults[$user->id()]=array("win"=>0,"loss"=>0,"push"=>0);
+            $player = new Player(get_user_by('ID',$id));
+            $allResults[$player->id()]=array("win"=>0,"loss"=>0,"push"=>0);
         }
         foreach($this->data->getGames() as $i=>$game){
             
@@ -27,9 +32,9 @@ class Scoreboard{
                 if($adjustedScore==0){
                     $allResults['TheChicken']['push']++;
 
-                    foreach($usersPicks as $user_id=>$userPick){
+                    foreach($playersPicks as $player_id=>$playerPick){
 
-                        $allResults[$user_id]['push']++;
+                        $allResults[$player_id]['push']++;
 
                     }
                 }
@@ -41,14 +46,14 @@ class Scoreboard{
                     else{
                         $allResults['TheChicken']['loss']++;
                     }
-                    foreach($usersPicks as $user_id=>$userPick){
-                        $user = new User(get_user_by("id",$user_id));
+                    foreach($playersPicks as $player_id=>$playerPick){
+                        $player = new Player(get_user_by("id",$player_id));
 
-                        if($winner == $userPick[$i]){
-                            $allResults[$user_id]['win']++;
+                        if($winner == $playerPick[$i]){
+                            $allResults[$player_id]['win']++;
                         }
                         else{
-                            $allResults[$user_id]['loss']++;
+                            $allResults[$player_id]['loss']++;
                         }
                         
                     }
@@ -71,8 +76,8 @@ class Scoreboard{
                     $name = $id;
                 }
                 else{
-                    $user = new User(get_user_by("ID",$id));
-                    $name = $user->display_name();
+                    $player = new Player(get_user_by("ID",$id));
+                    $name = $player->display_name();
                 }
             ?>
             <div class="row">

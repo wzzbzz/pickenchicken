@@ -8,6 +8,10 @@ namespace pickenchicken;
 class PickenChicken {
     public function __construct(){
 
+        if(wp_get_theme()->name !=="vinepress"){
+            return;
+        }
+
         // action hooks
         register_activation_hook( __FILE__ , array($this,'activate') );
         register_deactivation_hook( __FILE__ , array($this, 'deactivate' ) );
@@ -55,13 +59,8 @@ class PickenChicken {
     }
 
     public function admin_init(){
-        add_meta_box(
-            'pickenchicken_dailygamesbox',                 // Unique ID
-            'Today\'s Games',      // Box title
-            array('\\pickenchicken\\Views\\AdminViews\\DailyScheduleAdminView','renderDailyScheduleForm'),  // Content callback, must be of type callable
-            'daily-schedule'// Post type
-        );
         \pickenchicken\Controllers\DailyScheduleOfGamesController::admin_init();
+        \pickenchicken\Controllers\BonusesController::admin_init();
     }
 
     private function rewrites(){
@@ -98,7 +97,7 @@ class PickenChicken {
                 if(current_user_can('send_bulletins'))
                     $view = new \pickenchicken\Views\PageViews\ComposeBulletinView();
                 else
-                    $view = new \bandpress\Views\PageViews\ErrorPageView(404);
+                    $view = new \vinepress\Views\PageViews\ErrorPageView(404);
                 app()->setCurrentView($view);
                 break;
             case "editbulletin":
@@ -108,7 +107,7 @@ class PickenChicken {
                     $view = new \pickenchicken\Views\PageViews\EditBulletinView( $bulletin );
                 }
                 else
-                    $view = new \bandpress\Views\PageViews\ErrorPageView(404);
+                    $view = new \vinepress\Views\PageViews\ErrorPageView(404);
                     app()->setCurrentView($view);
                 
                 break;

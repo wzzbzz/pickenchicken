@@ -1,7 +1,7 @@
 <?php
 
 namespace pickenchicken\Models;
-use \bandpress\Models\Model;
+use \vinepress\Models\Model;
 
 class Bulletins extends Model{
 

@@ -4,7 +4,7 @@
     datafeeds.net free api feed.
 */
 namespace pickenchicken\Models;
-use bandpress\Models\Model;
+use vinepress\Models\Model;
 
 class Game extends Model{
     
