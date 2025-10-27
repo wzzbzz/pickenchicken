@@ -8,15 +8,7 @@ The primary objective of the game is to make optimal picks against an AI opponen
 
 ## Development Progress
 
-This initial attempt was abandoned due to ongoing challenges with folder structures and the development of a custom framework, leading to indecision in design.
-
-I have since resumed development using the Symfony framework. The project now follows a structured model including:
-- **Entities**: Define the data structure.
-- **Controllers**: Handle business logic and user interactions.
-- **Repositories**: Manage database operations.
-- **Commands**: Perform application-specific tasks.
-
-The updated codebase will be made available for review.
+This initial attempt used a custom MVC framework, implemented as a part of my ongoing struggle to comprehend Model / View / Controller aka MVC, which was a model I have always found severely lacking.
 
 ## Contributing
 
