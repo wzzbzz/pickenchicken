@@ -10,6 +10,10 @@ The primary objective of the game is to make optimal picks against an AI opponen
 
 This initial attempt is a Wordpress plugin which leverages the Wordpress MVC model I was trying to implement.   
 
+At this point in the development, I took employment with sports betting marketer American Affiliates to learn more about the industry, and more importantly the data. 
+
+I have since started a new code base using Symfony, which I'll get linked in here.
+
 ## Contributing
 
 If you are interested in contributing to the Picken Chicken project, please follow these steps:
