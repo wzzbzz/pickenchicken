@@ -8,7 +8,7 @@ The primary objective of the game is to make optimal picks against an AI opponen
 
 ## Development Progress
 
-This initial attempt used a custom MVC framework, implemented as a part of my ongoing struggle to comprehend Model / View / Controller aka MVC, which was a model I have always found severely lacking.
+This initial attempt is a Wordpress plugin which leverages the Wordpress MVC model I was trying to implement.   
 
 ## Contributing
 
