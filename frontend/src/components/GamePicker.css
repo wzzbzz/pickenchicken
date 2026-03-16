@@ -1,0 +1,161 @@
+.game-picker {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.pick-section h4 {
+  color: #667eea;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.team-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.team-option {
+  flex: 1;
+  min-width: 200px;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.team-option:hover:not(:disabled) {
+  border-color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
+}
+
+.team-option.selected {
+  border-color: #667eea;
+  background: #f0f4ff;
+  font-weight: 600;
+}
+
+.team-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.team-name {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.odds {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.team-option.selected .odds {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.reveal-section {
+  text-align: center;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.pick-made {
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.reveal-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reveal-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.chicken-reveal {
+  margin-top: 15px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chicken-pick {
+  background: #fff8e6;
+  border: 2px solid #ffd700;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.chicken-pick p {
+  color: #333;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.result {
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.result.match {
+  background: #e8f5e9;
+  border: 2px solid #4caf50;
+}
+
+.result.different {
+  background: #fff3e0;
+  border: 2px solid #ff9800;
+}
+
+.result-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.result p {
+  color: #333;
+  margin: 0;
+}
+
+.no-odds {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 20px;
+}
