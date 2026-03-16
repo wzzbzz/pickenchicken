@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[Route('/api/chicken')]
+#[Route('/chicken')]
 class ChickenController extends AbstractController
 {
     public function __construct(

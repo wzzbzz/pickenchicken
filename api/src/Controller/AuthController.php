@@ -12,7 +12,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/auth')]
+#[Route('/auth')]
 class AuthController extends AbstractController
 {
     #[Route('/request-login', methods: ['POST'])]
