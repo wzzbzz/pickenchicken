@@ -52,7 +52,7 @@ class AuthController extends AbstractController
         $magicLink = $frontendUrl . '/auth/verify?token=' . $token;
         
         $emailMessage = (new Email())
-            ->from('chicken@pickenchicken.com')
+            ->from($_ENV['MAILER_FROM'] ?? 'chicken@pickenchicken.com')
             ->to($email)
             ->subject('Your PickenChicken Magic Link')
             ->html("
