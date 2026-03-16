@@ -1,0 +1,3 @@
+# Crontab entry — add with: crontab -e
+# Runs every minute, starts/stops sync daemon based on active games
+* * * * * /var/www/pickenchicken/api/cron.sh >> /var/www/pickenchicken/api/var/log/cron.log 2>&1
