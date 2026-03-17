@@ -86,7 +86,7 @@ class TournamentSyncCommand extends Command
 
             $changed = $game->getStatus() !== $newStatus || $game->getWinner() !== $newWinner;
 
-            if ($changed) {
+            if ($changed || $scores) {
                 $game->setStatus($newStatus)->setWinner($newWinner);
 
                 if ($scores) {
@@ -94,8 +94,8 @@ class TournamentSyncCommand extends Command
                 }
 
                 $this->em->persist($game);
-                $gamesUpdated++;
-                $io->text(sprintf('Updated: %s vs %s → %s (Winner: %s, Score: %s-%s)',
+                if ($changed) $gamesUpdated++;
+                if ($changed) $io->text(sprintf('Updated: %s vs %s → %s (Winner: %s, Score: %s-%s)',
                     $game->getAwayTeam(), $game->getHomeTeam(),
                     $newStatus, $newWinner ?? 'TBD',
                     $scores['home'] ?? '?', $scores['away'] ?? '?'

@@ -125,11 +125,12 @@ class EspnApiClientService
     }
 
     /**
-     * Parse final scores. Returns ['home' => int, 'away' => int] or null if not final.
+     * Parse scores. Returns ['home' => int, 'away' => int] or null if not yet started.
      */
     public function parseScores(array $event): ?array
     {
-        if ($this->parseStatus($event) !== 'final') {
+        $status = $this->parseStatus($event);
+        if ($status === 'scheduled') {
             return null;
         }
 
