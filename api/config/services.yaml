@@ -28,3 +28,19 @@ services:
         arguments:
             - '%env(REDIS_URL)%'
 
+
+    App\Controller\BroadcastController:
+        autowire: false
+        autoconfigure: false
+    App\Controller\ChatController:
+        autowire: false
+        autoconfigure: false
+    App\Controller\ChallengeController:
+        autowire: false
+        autoconfigure: false
+    App\Controller\PublishController:
+        autowire: false
+        autoconfigure: false
+    App\Service\PresenceService:
+        autowire: false
+        autoconfigure: false
