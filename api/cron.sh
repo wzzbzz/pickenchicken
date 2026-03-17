@@ -13,6 +13,19 @@ log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
 }
 
+# Run odds:fetch once per hour (on the hour)
+MINUTE=$(date '+%M')
+if [ "$MINUTE" = "00" ]; then
+    log "Running odds:fetch"
+    $PHP "$CONSOLE" app:odds:fetch >> "$API_DIR/var/log/cron.log" 2>&1
+fi
+
+# Run odds:lock every 5 minutes
+if [ $((10#$MINUTE % 5)) -eq 0 ]; then
+    log "Running odds:lock"
+    $PHP "$CONSOLE" app:odds:lock >> "$API_DIR/var/log/cron.log" 2>&1
+fi
+
 # Check if active games exist
 if $PHP "$CONSOLE" app:tournament:has-active-games --quiet 2>/dev/null; then
     GAMES_ACTIVE=true
