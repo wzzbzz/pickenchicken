@@ -154,7 +154,7 @@ function TournamentApp({ user, onLogout }) {
       <div className="pc-masthead">
         <div>
           <div className="pc-logo">The Picken' <span>Chicken</span></div>
-          <div className="pc-tagline">Can you beat pure randomness?</div>
+          <div className="pc-tagline">Is your guess as good as mine?</div>
         </div>
         <div className="pc-user-bar">
           <span>{user.username || user.email}</span>
