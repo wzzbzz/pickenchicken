@@ -17,7 +17,7 @@ function Login({ onLogin }) {
       // Use Doink's auth API
       const apiUrl = window.location.hostname === 'localhost' 
         ? BACKEND_BASE_URL
-        : 'https://pickenchicken.com';
+        : 'https://api.pickenchicken.com';
         
       const response = await fetch(`${apiUrl}/auth/request-login`, {
         method: 'POST',
@@ -47,10 +47,8 @@ function Login({ onLogin }) {
           <h1>🐔 Check Your Email!</h1>
           <p>We've sent a magic login link to:</p>
           <p className="email-sent">{email}</p>
-          <p className="help-text">Click the link in the email to log in. The link expires in 15 minutes.</p>
-          <p className="dev-note">
-            💡 <strong>Development Mode:</strong> Check your terminal/console for the magic link!
-          </p>
+          <p className="help-text">Click the link in the email to log in. The link expires in 1 hour.</p>
+
         </div>
       </div>
     );
@@ -60,7 +58,7 @@ function Login({ onLogin }) {
     <div className="login-container">
       <div className="login-card">
         <h1>🐔 The Picken' Chicken</h1>
-        <p className="tagline">Can you beat pure randomness?</p>
+        <p className="tagline">Your guess is as good as mine</p>
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">

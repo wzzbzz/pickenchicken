@@ -8,6 +8,10 @@ function VerifyAuth({ onLogin }) {
   const navigate = useNavigate();
   const [status, setStatus] = useState('verifying');
   const [error, setError] = useState('');
+  const [user, setUser] = useState(null);
+  const [nickname, setNickname] = useState('');
+  const [nicknameError, setNicknameError] = useState('');
+  const [savingNickname, setSavingNickname] = useState(false);
   const verificationAttempted = useRef(false);
 
   useEffect(() => {
@@ -53,17 +57,16 @@ function VerifyAuth({ onLogin }) {
           localStorage.setItem('user_username', data.user.username);
         }
 
-        setStatus('success');
-        
-        // Call parent onLogin callback
-        if (onLogin) {
-          onLogin(data.user);
-        }
+        setUser(data.user);
 
-        // Redirect to main app after 2 seconds
-        setTimeout(() => {
-          navigate('/');
-        }, 2000);
+        if (!data.user.username) {
+          // Prompt for nickname before redirecting
+          setStatus('set-nickname');
+        } else {
+          setStatus('success');
+          if (onLogin) onLogin(data.user);
+          setTimeout(() => navigate('/'), 2000);
+        }
 
       } catch (err) {
         setStatus('error');
@@ -74,6 +77,37 @@ function VerifyAuth({ onLogin }) {
     verifyToken();
   }, [searchParams, navigate, onLogin]);
 
+  const saveNickname = async () => {
+    if (!nickname.trim()) {
+      setNicknameError('Please enter a nickname');
+      return;
+    }
+    if (!/^[a-zA-Z0-9_]{3,20}$/.test(nickname)) {
+      setNicknameError('3-20 characters, letters/numbers/underscore only');
+      return;
+    }
+    setSavingNickname(true);
+    try {
+      const apiUrl = window.location.hostname === 'localhost'
+        ? BACKEND_BASE_URL
+        : 'https://api.pickenchicken.com';
+      const response = await fetch(`${apiUrl}/auth/update-username`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, username: nickname }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to save nickname');
+      localStorage.setItem('user_username', nickname);
+      if (onLogin) onLogin({ ...user, username: nickname });
+      setStatus('success');
+      setTimeout(() => navigate('/'), 2000);
+    } catch (err) {
+      setNicknameError(err.message);
+      setSavingNickname(false);
+    }
+  };
+
   return (
     <div className="verify-container">
       <div className="verify-card">
@@ -81,6 +115,28 @@ function VerifyAuth({ onLogin }) {
           <>
             <div className="spinner"></div>
             <h2>Verifying your login...</h2>
+          </>
+        )}
+
+        {status === 'set-nickname' && (
+          <>
+            <div className="success-icon">✓</div>
+            <h2>One more thing...</h2>
+            <p>Pick a nickname to show on the leaderboard:</p>
+            <input
+              type="text"
+              value={nickname}
+              onChange={e => { setNickname(e.target.value); setNicknameError(''); }}
+              placeholder="e.g. ChickenSlayer99"
+              maxLength={20}
+              className="nickname-input"
+              onKeyDown={e => e.key === 'Enter' && saveNickname()}
+              autoFocus
+            />
+            {nicknameError && <p className="error-text">{nicknameError}</p>}
+            <button onClick={saveNickname} disabled={savingNickname} className="magic-button">
+              {savingNickname ? 'Saving...' : "Let's go! 🐔"}
+            </button>
           </>
         )}
 
