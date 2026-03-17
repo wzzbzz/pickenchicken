@@ -467,10 +467,11 @@ function GameCard({ game, onPick }) {
       <div className="pc-game-region-bar">{game.region} · {commenceDate}</div>
 
       <div className="pc-game-teams">
-        {[['away', game.awayTeam, game.awayTeamSeed], ['home', game.homeTeam, game.homeTeamSeed]].map(([side, name, seed]) => (
+        {[['away', game.awayTeam, game.awayTeamSeed, game.awayScore], ['home', game.homeTeam, game.homeTeamSeed, game.homeScore]].map(([side, name, seed, score]) => (
           <div key={side} className="pc-team-row">
             <span className="pc-seed">{seed}</span>
             <span className={`pc-team-name ${teamClass(name)}`}>{name}</span>
+            {score != null && <span className="pc-team-score">{score}</span>}
           </div>
         ))}
       </div>

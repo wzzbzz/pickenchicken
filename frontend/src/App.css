@@ -55,6 +55,7 @@ body { font-family: 'DM Sans', sans-serif; background: #FDF6E3; color: #1a1208; 
 .pc-team-name { font-size: 13px; font-weight: 500; flex: 1; color: #1a1208; }
 .pc-team-name.winner { color: #1a5c2a; font-weight: 700; }
 .pc-team-name.loser { color: #999; text-decoration: line-through; }
+.pc-team-score { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 700; color: #1a1208; min-width: 24px; text-align: right; }
 .pc-game-divider { border: none; border-top: 1px dashed #c8bfa0; margin: 4px 12px; }
 
 /* ── Pick area ── */

@@ -86,6 +86,8 @@ class TournamentController extends AbstractController
                 'commenceTime' => $g->getCommenceTime()?->format(\DateTime::ATOM),
                 'status'       => $g->getStatus(),
                 'winner'       => $g->getWinner(),
+                'homeScore'    => $g->getHomeScore(),
+                'awayScore'    => $g->getAwayScore(),
                 'espnGameId'   => $g->getEspnGameId(),
                 'market'       => $market ? [
                     'id'        => $market->getId(),
