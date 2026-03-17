@@ -19,7 +19,7 @@ function Login({ onLogin }) {
         ? BACKEND_BASE_URL
         : 'https://pickenchicken.com';
         
-      const response = await fetch(`${apiUrl}/api/auth/request-login`, {
+      const response = await fetch(`${apiUrl}/auth/request-login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

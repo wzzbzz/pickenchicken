@@ -32,7 +32,7 @@ function VerifyAuth({ onLogin }) {
           ? BACKEND_BASE_URL
           : 'https://api.pickenchicken.com';
           
-        const response = await fetch(`${apiUrl}/api/auth/verify-token`, {
+        const response = await fetch(`${apiUrl}/auth/verify-token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
