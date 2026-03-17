@@ -245,9 +245,11 @@ function BracketTab({ user }) {
 
   if (error) return <div className="pc-empty">Error: {error}</div>;
 
-  const visibleGames = hidePast
+  const statusOrder = { in_progress: 0, scheduled: 1, final: 2 };
+  const visibleGames = (hidePast
     ? games.filter(g => g.status === 'scheduled' || g.status === 'in_progress')
-    : games;
+    : games
+  ).slice().sort((a, b) => (statusOrder[a.status] ?? 1) - (statusOrder[b.status] ?? 1));
 
   const byRegion = visibleGames.reduce((acc, g) => {
     const r = g.region || 'Other';
