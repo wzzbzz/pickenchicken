@@ -138,17 +138,17 @@ class ChatController extends AbstractController
 
     private function generateSubscriberJwt(string $secret, array $topics): string
     {
-        $header  = base64url_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
-        $payload = base64url_encode(json_encode([
+        $header  = $this->base64urlEncode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
+        $payload = $this->base64urlEncode(json_encode([
             'mercure' => ['subscribe' => $topics],
             'exp'     => time() + 3600,
         ]));
-        $sig = base64url_encode(hash_hmac('sha256', "$header.$payload", $secret, true));
+        $sig = $this->base64urlEncode(hash_hmac('sha256', "$header.$payload", $secret, true));
         return "$header.$payload.$sig";
     }
-}
 
-function base64url_encode(string $data): string
-{
-    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    private function base64urlEncode(string $data): string
+    {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
 }
