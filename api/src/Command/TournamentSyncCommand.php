@@ -43,9 +43,9 @@ class TournamentSyncCommand extends Command
     {
         $this
             ->addOption('start', null, InputOption::VALUE_REQUIRED,
-                'Start date YYYYMMDD', '20250318')
+                'Start date YYYYMMDD', '20260317')
             ->addOption('end', null, InputOption::VALUE_REQUIRED,
-                'End date YYYYMMDD', '20250407');
+                'End date YYYYMMDD', '20260407');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -36,8 +36,8 @@ while true; do
 
     log "Running sync..."
     $PHP "$CONSOLE" app:tournament:sync \
-        --start=20250318 \
-        --end=20250407 \
+        --start=20260317 \
+        --end=20260407 \
         --no-interaction \
         --quiet 2>>"$LOG_FILE" && log "Sync OK" || log "Sync FAILED"
 
