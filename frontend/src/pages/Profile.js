@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Profile.css';
 
-const API = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8001/api';
+const API = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8001';
 
 async function apiFetch(path, opts = {}) {
   const res = await fetch(`${API}${path}`, {
