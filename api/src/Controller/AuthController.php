@@ -108,6 +108,45 @@ class AuthController extends AbstractController
         ], 200);
     }
 
+    #[Route('/me/{userId}', methods: ['GET'])]
+    public function me(
+        int $userId,
+        UserRepository $userRepository,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $user = $userRepository->find($userId);
+        if (!$user) return new JsonResponse(['message' => 'User not found'], 404);
+
+        // Overall pick record
+        $picks = $em->createQueryBuilder()
+            ->select('p')
+            ->from('App\Entity\Pick', 'p')
+            ->where('p.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()->getResult();
+
+        $wins = $losses = $pending = 0;
+        foreach ($picks as $pick) {
+            $r = $pick->getResult();
+            if ($r === 'user_wins' || $r === 'tie_win')    $wins++;
+            elseif ($r === 'chicken_wins' || $r === 'tie_loss') $losses++;
+            else $pending++;
+        }
+
+        return new JsonResponse([
+            'id'        => $user->getId(),
+            'email'     => $user->getEmail(),
+            'username'  => $user->getUsername(),
+            'memberSince' => $user->getCreatedAt()?->format('Y-m-d'),
+            'record'    => [
+                'wins'    => $wins,
+                'losses'  => $losses,
+                'pending' => $pending,
+                'total'   => count($picks),
+            ],
+        ]);
+    }
+
     #[Route('/update-username', methods: ['POST'])]
     public function updateUsername(
         Request $request,

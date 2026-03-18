@@ -1,0 +1,199 @@
+/* ── Profile ── */
+.pc-profile {
+  max-width: 560px;
+}
+
+.pc-profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.pc-profile-avatar {
+  font-size: 48px;
+  line-height: 1;
+  flex-shrink: 0;
+  background: #1a1208;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  border: 2px solid #D4A017;
+}
+
+.pc-profile-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.pc-profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pc-profile-username {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1208;
+  line-height: 1;
+}
+
+.pc-profile-edit-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: none;
+  border: 1px solid #b8a882;
+  color: #5a4e38;
+  padding: 3px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.pc-profile-edit-btn:hover {
+  border-color: #D4A017;
+  color: #D4A017;
+}
+
+.pc-profile-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pc-profile-username-input {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1208;
+  background: #fff;
+  border: 2px solid #D4A017;
+  border-radius: 2px;
+  padding: 4px 8px;
+  outline: none;
+  width: 200px;
+}
+
+.pc-profile-save-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: #1a1208;
+  border: none;
+  color: #D4A017;
+  padding: 5px 12px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.pc-profile-save-btn:disabled { opacity: 0.5; cursor: default; }
+
+.pc-profile-cancel-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: none;
+  border: 1px solid #b8a882;
+  color: #5a4e38;
+  padding: 4px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.pc-profile-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #5a4e38;
+  letter-spacing: 0.03em;
+}
+
+.pc-profile-error {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #c0392b;
+}
+
+.pc-profile-success {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #1a5c2a;
+}
+
+.pc-profile-divider {
+  border: none;
+  border-top: 1px solid #c8bfa0;
+  margin-bottom: 20px;
+}
+
+.pc-profile-section-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #5a4e38;
+  margin-bottom: 14px;
+}
+
+.pc-profile-record-bar {
+  background: #1a1208;
+  border-radius: 3px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.pc-profile-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pc-profile-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #D4A017;
+  line-height: 1;
+}
+
+.pc-profile-wins    { color: #7ab87a; }
+.pc-profile-losses  { color: #c0392b; }
+.pc-profile-pending { color: #a89060; }
+
+.pc-profile-stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a89060;
+}
+
+.pc-profile-stat-divider {
+  width: 1px;
+  height: 44px;
+  background: #3a3020;
+}
+
+.pc-profile-verdict {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5a4e38;
+  padding-left: 2px;
+}

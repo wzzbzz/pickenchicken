@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import Login from './pages/Login';
 import VerifyAuth from './pages/VerifyAuth';
+import Profile from './pages/Profile';
 import TermsOfUse from './pages/TermsOfUse';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import './App.css';
@@ -146,9 +147,15 @@ function Footer() {
   );
 }
 
-function TournamentApp({ user, onLogout }) {
+function TournamentApp({ user: initialUser, onLogout }) {
   const [tab, setTab] = useState('bracket');
+  const [user, setUser] = useState(initialUser);
   const DEV_MODE = process.env.REACT_APP_DEV_MODE === 'true';
+
+  const handleUsernameUpdate = (newUsername) => {
+    setUser(u => ({ ...u, username: newUsername }));
+    localStorage.setItem('user_username', newUsername);
+  };
   return (
     <div className="pc-root">
       <div className="pc-masthead">
@@ -157,12 +164,14 @@ function TournamentApp({ user, onLogout }) {
           <div className="pc-tagline">Is your guess as good as mine?</div>
         </div>
         <div className="pc-user-bar">
-          <span>{user.username || user.email}</span>
+          <span style={{ cursor: 'pointer' }} onClick={() => setTab('profile')}>
+            {user.username || user.email}
+          </span>
           <button className="pc-logout-btn" onClick={onLogout}>Sign out</button>
         </div>
       </div>
       <nav className="pc-nav">
-        {[['bracket','Bracket'],['my-picks','My Picks'],['leaderboard','Leaderboard']].map(([key, label]) => (
+        {[['bracket','Bracket'],['my-picks','My Picks'],['leaderboard','Leaderboard'],['profile','Profile']].map(([key, label]) => (
           <button key={key} className={`pc-nav-tab ${tab === key ? 'active' : ''}`} onClick={() => setTab(key)}>
             {label}
           </button>
@@ -172,6 +181,7 @@ function TournamentApp({ user, onLogout }) {
         {tab === 'bracket'     && <BracketTab user={user} key={tab} />}
         {tab === 'my-picks'    && <MyPicksTab user={user} />}
         {tab === 'leaderboard' && <LeaderboardTab />}
+        {tab === 'profile'     && <Profile user={user} onUsernameUpdate={handleUsernameUpdate} />}
       </div>
       {DEV_MODE && <DevBar />}
       <Footer />
