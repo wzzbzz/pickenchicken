@@ -207,7 +207,7 @@ function BracketTab({ user }) {
     if (!round) return;
     if (showLoading) setLoadingGames(true);
     apiFetch(`/tournament/rounds/${round.id}/games?userId=${userRef.current.id}&marketKey=spreads`)
-      .then(data => { setGames(data); setLoadingGames(false); })
+      .then(data => { setGames([...data]); setLoadingGames(false); })
       .catch(e => { setError(e.message); setLoadingGames(false); });
   }, []);
 
@@ -216,13 +216,13 @@ function BracketTab({ user }) {
     fetchGames(activeRound, true);
   }, [activeRound, fetchGames]);
 
-  // Poll every 15 seconds — pure read, no server-side triggers
+  // Poll every 10 seconds — pure read, no server-side triggers
   useEffect(() => {
     const interval = setInterval(() => {
       const round = activeRoundRef.current;
       if (!round || round.status === 'complete') return;
       fetchGames(round, false);
-    }, 15000);
+    }, 10000);
     return () => clearInterval(interval);
   }, [fetchGames]);
 
