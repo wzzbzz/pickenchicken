@@ -345,7 +345,7 @@ function RoundLeaderboard({ round }) {
   if (all.length === 0) return null;
 
   const record = e => `${e.wins}–${e.losses}`;
-  const pct = e => e.picked > 0 ? `${Math.round((e.wins / e.picked) * 100)}%` : '—';
+  const pct = e => { const s = e.wins + e.losses; return s > 0 ? `${Math.round((e.wins / s) * 100)}%` : '—'; };
 
   return (
     <div className="pc-round-lb">
@@ -675,7 +675,7 @@ function LeaderboardTab() {
   );
 
   const record = e => `${e.wins}–${e.losses}`;
-  const pct = e => e.picked > 0 ? `${Math.round((e.wins / e.picked) * 100)}%` : '—';
+  const pct = e => { const s = e.wins + e.losses; return s > 0 ? `${Math.round((e.wins / s) * 100)}%` : '—'; };
 
   return (
     <div className="pc-leaderboard">
