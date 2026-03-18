@@ -190,8 +190,7 @@ class TournamentController extends AbstractController
         $qb = $this->em->createQueryBuilder()
             ->select('p, u')
             ->from('App\Entity\Pick', 'p')
-            ->join('p.user', 'u')
-            ->where('p.result IS NOT NULL');
+            ->join('p.user', 'u');
 
         if ($roundId) {
             $qb->join('p.game', 'g')
