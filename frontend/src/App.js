@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import Login from './pages/Login';
 import VerifyAuth from './pages/VerifyAuth';
 import Profile from './pages/Profile';
+import Chat from './components/Chat';
 import TermsOfUse from './pages/TermsOfUse';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import './App.css';
@@ -171,7 +172,7 @@ function TournamentApp({ user: initialUser, onLogout }) {
         </div>
       </div>
       <nav className="pc-nav">
-        {[['bracket','Bracket'],['my-picks','My Picks'],['leaderboard','Leaderboard'],['profile','Profile']].map(([key, label]) => (
+        {[['bracket','Bracket'],['my-picks','My Picks'],['leaderboard','Leaderboard'],['chat','Chat'],['profile','Profile']].map(([key, label]) => (
           <button key={key} className={`pc-nav-tab ${tab === key ? 'active' : ''}`} onClick={() => setTab(key)}>
             {label}
           </button>
@@ -181,6 +182,7 @@ function TournamentApp({ user: initialUser, onLogout }) {
         {tab === 'bracket'     && <BracketTab user={user} key={tab} />}
         {tab === 'my-picks'    && <MyPicksTab user={user} />}
         {tab === 'leaderboard' && <LeaderboardTab />}
+        {tab === 'chat'        && <Chat user={user} />}
         {tab === 'profile'     && <Profile user={user} onUsernameUpdate={handleUsernameUpdate} />}
       </div>
       {DEV_MODE && <DevBar />}
