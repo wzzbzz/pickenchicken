@@ -688,7 +688,7 @@ function LeaderboardTab() {
               <th className="pc-lb-th">Player</th>
               <th className="pc-lb-th pc-lb-th-num">Record</th>
               <th className="pc-lb-th pc-lb-th-num">ATS %</th>
-              <th className="pc-lb-th pc-lb-th-num">Picked</th>
+              <th className="pc-lb-th pc-lb-th-num">Total Picks</th>
             </tr>
           </thead>
           <tbody>
