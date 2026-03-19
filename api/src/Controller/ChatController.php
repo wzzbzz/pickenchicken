@@ -110,7 +110,7 @@ class ChatController extends AbstractController
             return new JsonResponse(['error' => 'User not found'], 404);
         }
 
-        $secret = $_ENV['MERCURE_JWT_SECRET'] ?? null;
+        $secret = $_ENV['MERCURE_SUBSCRIBER_SECRET'] ?? $_ENV['MERCURE_JWT_SECRET'] ?? null;
         if (!$secret) {
             return new JsonResponse(['error' => 'Mercure not configured'], 500);
         }
