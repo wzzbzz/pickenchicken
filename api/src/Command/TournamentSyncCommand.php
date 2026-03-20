@@ -102,6 +102,14 @@ class TournamentSyncCommand extends Command
                 $io->text(sprintf('  Backfilled away: %s (#%d)', $competitors['away']['name'], $competitors['away']['seed'] ?? 0));
             }
 
+            // Backfill commenceTime if ESPN has updated it (TBD games often have placeholder dates)
+            $espnDate = new \DateTimeImmutable($event['date']);
+            if ($game->getCommenceTime() === null || $game->getCommenceTime() != $espnDate) {
+                $game->setCommenceTime($espnDate);
+                $changed = true;
+                $io->text(sprintf('  Backfilled commenceTime: %s', $espnDate->format('Y-m-d H:i:s')));
+            }
+
             if ($changed || $scores) {
                 $game->setStatus($newStatus)->setWinner($newWinner);
 
