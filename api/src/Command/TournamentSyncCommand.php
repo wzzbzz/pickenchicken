@@ -72,9 +72,10 @@ class TournamentSyncCommand extends Command
 
             if (!$game) continue;
 
-            $newStatus = $this->espn->parseStatus($event);
-            $newWinner = $this->espn->parseWinner($event);
-            $scores    = $this->espn->parseScores($event);
+            $newStatus      = $this->espn->parseStatus($event);
+            $newWinner      = $this->espn->parseWinner($event);
+            $scores         = $this->espn->parseScores($event);
+            $competitors    = $this->espn->parseCompetitors($event);
 
             // Override with simulated clock: if game hasn't started yet per clock, force scheduled
             $commenceTime = $game->getCommenceTime();
@@ -85,6 +86,21 @@ class TournamentSyncCommand extends Command
             }
 
             $changed = $game->getStatus() !== $newStatus || $game->getWinner() !== $newWinner;
+
+            // Backfill TBD team names/seeds once ESPN resolves the bracket
+            $isTbd = fn(?string $s) => $s === null || strtolower(trim($s)) === 'tbd' || trim($s) === '';
+            if ($competitors['home'] && $isTbd($game->getHomeTeam())) {
+                $game->setHomeTeam($competitors['home']['name'])
+                     ->setHomeTeamSeed($competitors['home']['seed']);
+                $changed = true;
+                $io->text(sprintf('  Backfilled home: %s (#%d)', $competitors['home']['name'], $competitors['home']['seed'] ?? 0));
+            }
+            if ($competitors['away'] && $isTbd($game->getAwayTeam())) {
+                $game->setAwayTeam($competitors['away']['name'])
+                     ->setAwayTeamSeed($competitors['away']['seed']);
+                $changed = true;
+                $io->text(sprintf('  Backfilled away: %s (#%d)', $competitors['away']['name'], $competitors['away']['seed'] ?? 0));
+            }
 
             if ($changed || $scores) {
                 $game->setStatus($newStatus)->setWinner($newWinner);
