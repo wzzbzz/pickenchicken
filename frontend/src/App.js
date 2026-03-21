@@ -51,7 +51,7 @@ export default function App() {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/*" element={
           user ? <TournamentApp user={user} onLogout={handleLogout} />
-               : <Navigate to="/login" replace />
+            : <Navigate to="/login" replace />
         } />
       </Routes>
     </BrowserRouter>
@@ -63,7 +63,7 @@ function DevBar() {
   const [custom, setCustom] = useState('');
   const [syncing, setSyncing] = useState(false);
 
-  const loadClock = () => apiFetch('/dev/clock').then(setClock).catch(() => {});
+  const loadClock = () => apiFetch('/dev/clock').then(setClock).catch(() => { });
 
   useEffect(() => { loadClock(); }, []);
 
@@ -105,7 +105,7 @@ function DevBar() {
         </span>
       </div>
       <div className="pc-devbar-controls">
-        {['1h','4h','12h','1d','2d','3d'].map(d => (
+        {['1h', '4h', '12h', '1d', '2d', '3d'].map(d => (
           <button key={d} className="pc-devbar-btn" onClick={() => advance(d)}>+{d}</button>
         ))}
       </div>
@@ -157,6 +157,20 @@ function TournamentApp({ user: initialUser, onLogout }) {
     setUser(u => ({ ...u, username: newUsername }));
     localStorage.setItem('user_username', newUsername);
   };
+
+  const [chatOnlineCount, setChatOnlineCount] = useState(null);
+
+  useEffect(() => {
+    const fetchPresence = () => {
+      apiFetch('/chat/presence')
+        .then(d => setChatOnlineCount(d.users?.length ?? null))
+        .catch(() => { });
+    };
+    fetchPresence();
+    const interval = setInterval(fetchPresence, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="pc-root">
       <div className="pc-masthead">
@@ -172,18 +186,18 @@ function TournamentApp({ user: initialUser, onLogout }) {
         </div>
       </div>
       <nav className="pc-nav">
-        {[['bracket','Bracket'],['my-picks','My Picks'],['leaderboard','Leaderboard'],['chat','Chat'],['profile','Profile']].map(([key, label]) => (
+        {[['bracket', 'Bracket'], ['my-picks', 'My Picks'], ['leaderboard', 'Leaderboard'], ['chat', `Chat${chatOnlineCount ? ` (${chatOnlineCount})` : ''}`], ['profile', 'Profile']].map(([key, label]) => (
           <button key={key} className={`pc-nav-tab ${tab === key ? 'active' : ''}`} onClick={() => setTab(key)}>
             {label}
           </button>
         ))}
       </nav>
       <div className="pc-body">
-        {tab === 'bracket'     && <BracketTab user={user} key={tab} />}
-        {tab === 'my-picks'    && <MyPicksTab user={user} />}
+        {tab === 'bracket' && <BracketTab user={user} key={tab} />}
+        {tab === 'my-picks' && <MyPicksTab user={user} />}
         {tab === 'leaderboard' && <LeaderboardTab />}
-        {tab === 'chat'        && <Chat user={user} />}
-        {tab === 'profile'     && <Profile user={user} onUsernameUpdate={handleUsernameUpdate} />}
+        {tab === 'chat' && <Chat user={user} />}
+        {tab === 'profile' && <Profile user={user} onUsernameUpdate={handleUsernameUpdate} />}
       </div>
       {DEV_MODE && <DevBar />}
       <Footer />
@@ -247,9 +261,7 @@ function BracketTab({ user }) {
       // Re-fetch games to get updated pick + chicken pick state
       fetchGames(activeRoundRef.current, false);
     } catch (e) {
-      alert(e.status === 423 ? 'Picks are locked once the game starts.' :
-            e.status === 425 ? 'Odds not yet locked — check back at 10am on game day.' :
-            e.message);
+      alert(e.status === 423 ? 'Picks are locked once the game starts.' : e.message);
     }
   }, [fetchGames]);
 
@@ -302,13 +314,13 @@ function BracketTab({ user }) {
       {loadingGames
         ? <div className="pc-empty">Loading games...</div>
         : Object.entries(byRegion).map(([region, regionGames]) => (
-            <div key={region} className="pc-region-group">
-              <div className="pc-region-label">{region}</div>
-              <div className="pc-games-grid">
-                {regionGames.map(g => <GameCard key={g.id} game={g} onPick={handlePick} />)}
-              </div>
+          <div key={region} className="pc-region-group">
+            <div className="pc-region-label">{region}</div>
+            <div className="pc-games-grid">
+              {regionGames.map(g => <GameCard key={g.id} game={g} onPick={handlePick} />)}
             </div>
-          ))
+          </div>
+        ))
       }
     </>
   );
@@ -317,7 +329,7 @@ function BracketTab({ user }) {
 function ChickenPickMessage({ games }) {
   const availableGames = games.filter(g => g.market?.isLocked && g.status === 'scheduled');
   const available = availableGames.length;
-  const picked    = availableGames.filter(g => g.pick?.userOutcome).length;
+  const picked = availableGames.filter(g => g.pick?.userOutcome).length;
   const remaining = available - picked;
 
   if (available === 0) return null;
@@ -344,7 +356,7 @@ function RoundLeaderboard({ round }) {
     if (!round || round.status !== 'complete') return;
     apiFetch(`/tournament/leaderboard?roundId=${round.id}`)
       .then(setData)
-      .catch(() => {});
+      .catch(() => { });
   }, [round?.id, round?.status]);
 
   if (!data) return null;
@@ -393,10 +405,10 @@ function RoundScore({ games }) {
   games.forEach(g => {
     const result = g.pick?.result;
     if (!result) return;
-    if (result === 'user_wins')    { youWins++;     chickenLosses++; }
-    if (result === 'chicken_wins') { youLosses++;   chickenWins++;   }
-    if (result === 'tie_win')      { youWins++;     chickenWins++;   }
-    if (result === 'tie_loss')     { youLosses++;   chickenLosses++; }
+    if (result === 'user_wins') { youWins++; chickenLosses++; }
+    if (result === 'chicken_wins') { youLosses++; chickenWins++; }
+    if (result === 'tie_win') { youWins++; chickenWins++; }
+    if (result === 'tie_loss') { youLosses++; chickenLosses++; }
   });
 
   const scored = youWins + youLosses;
@@ -419,7 +431,7 @@ function PicksToast({ games }) {
 
   const availableGames = games.filter(g => g.market?.isLocked && g.status === 'scheduled');
   const available = availableGames.length;
-  const picked    = availableGames.filter(g => g.pick?.userOutcome).length;
+  const picked = availableGames.filter(g => g.pick?.userOutcome).length;
 
   // Reset visibility and restart timer whenever picked count changes
   useEffect(() => {
@@ -459,22 +471,21 @@ function GameCard({ game, onPick }) {
     : '';
 
   const resultLabel = {
-    user_wins:    '🏆 You beat the chicken!',
+    user_wins: '🏆 You beat the chicken!',
     chicken_wins: '🐔 Chicken wins this one',
-    tie_win:      '🤝 You both covered',
-    tie_loss:     '😬 You both missed',
+    tie_win: '🤝 You both covered',
+    tie_loss: '😬 You both missed',
   }[result];
 
-  const hasMarket  = !!game.market;
-  const isLocked   = game.market?.isLocked;
-  const outcomes   = game.market?.outcomes || [];
+  const hasMarket = !!game.market;
+  const isLocked = game.market?.isLocked;
+  const outcomes = game.market?.outcomes || [];
   const chickenPick = game.chickenPick; // set once market is locked
 
   // Determine pick area state
   let pickState = 'no_odds';        // no market at all
-  if (hasMarket && !isLocked) pickState = 'odds_pending_lock'; // market exists but chicken hasn't picked
-  if (hasMarket && isLocked)  pickState = 'open';              // chicken has picked, user can pick
-  if (locked)                 pickState = 'game_locked';        // game in progress or final
+  if (hasMarket) pickState = 'open';            // odds available — user can pick any time
+  if (locked) pickState = 'game_locked';        // game in progress or final
 
   return (
     <div className="pc-game-card">
@@ -497,16 +508,12 @@ function GameCard({ game, onPick }) {
           <div className="pc-odds-pending">Odds pending</div>
         )}
 
-        {pickState === 'odds_pending_lock' && (
-          <div className="pc-odds-pending">🐔 Chicken picks at 10am game day</div>
-        )}
-
         {(pickState === 'open' || pickState === 'game_locked') && (
           <>
             <div className="pc-pick-label">
               {pickState === 'game_locked' && pick ? 'Your pick' :
-               pickState === 'game_locked'          ? 'Game in progress' :
-               'Pick against the spread'}
+                pickState === 'game_locked' ? 'Game in progress' :
+                  'Pick against the spread'}
             </div>
 
             {(pickState === 'open' || pick) && (
@@ -627,7 +634,7 @@ function ChickenTrashTalk({ all }) {
     const prompt = `You are The Chicken, a smack-talking mascot for a March Madness picks game where players try to beat a chicken picking randomly.
 
 Standings:
-${all.map((e, i) => `${i+1}. ${e.isChicken ? '🐔 The Chicken' : e.username} — ${e.wins}-${e.losses}`).join('\n')}
+${all.map((e, i) => `${i + 1}. ${e.isChicken ? '🐔 The Chicken' : e.username} — ${e.wins}-${e.losses}`).join('\n')}
 
 The Chicken is ranked #${chickenRank}.
 
@@ -645,7 +652,7 @@ Under 100 chars each. Funny not mean. No labels, no quotes, just the 3 lines.`;
     })
       .then(r => r.json())
       .then(d => { if (d.lines?.length) setTalk(d.lines); })
-      .catch(() => {});
+      .catch(() => { });
   }, [JSON.stringify(all?.map(e => e.wins + e.losses))]);
 
   if (!talk) return (
@@ -670,6 +677,7 @@ Under 100 chars each. Funny not mean. No labels, no quotes, just the 3 lines.`;
 function LeaderboardTab() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState('wins'); // 'wins' | 'pct'
 
   useEffect(() => {
     apiFetch('/tournament/leaderboard')
@@ -680,14 +688,28 @@ function LeaderboardTab() {
   if (loading) return <div className="pc-empty">Loading...</div>;
   if (!data) return <div className="pc-empty">Failed to load leaderboard</div>;
 
-  // Merge players + chicken into one sorted list
-  const chicken = data.chicken;
-  const all = [...data.players, chicken].sort((a, b) =>
-    b.wins !== a.wins ? b.wins - a.wins : a.losses - b.losses
-  );
-
+  const pctVal = e => { const s = e.wins + e.losses; return s > 0 ? e.wins / s : -1; };
   const record = e => `${e.wins}–${e.losses}`;
   const pct = e => { const s = e.wins + e.losses; return s > 0 ? `${Math.round((e.wins / s) * 100)}%` : '—'; };
+
+  const chicken = data.chicken;
+  const all = [...data.players, chicken].sort((a, b) => {
+    if (sortBy === 'pct') {
+      const diff = pctVal(b) - pctVal(a);
+      return diff !== 0 ? diff : b.wins - a.wins;
+    }
+    // default: wins, tiebreak losses
+    return b.wins !== a.wins ? b.wins - a.wins : a.losses - b.losses;
+  });
+
+  const SortHeader = ({ col, children, className }) => (
+    <th
+      className={`pc-lb-th pc-lb-th-sortable ${className || ''} ${sortBy === col ? 'pc-lb-th-active' : ''}`}
+      onClick={() => setSortBy(col)}
+    >
+      {children}{sortBy === col ? ' ↓' : ''}
+    </th>
+  );
 
   return (
     <div className="pc-leaderboard">
@@ -699,7 +721,8 @@ function LeaderboardTab() {
               <th className="pc-lb-th pc-lb-th-rank">#</th>
               <th className="pc-lb-th">Player</th>
               <th className="pc-lb-th pc-lb-th-num">Record</th>
-              <th className="pc-lb-th pc-lb-th-num">ATS %</th>
+              <SortHeader col="wins" className="pc-lb-th-num">Wins</SortHeader>
+              <SortHeader col="pct" className="pc-lb-th-num">ATS %</SortHeader>
               <th className="pc-lb-th pc-lb-th-num">Total Picks</th>
             </tr>
           </thead>
@@ -711,6 +734,7 @@ function LeaderboardTab() {
                   {e.isChicken ? <><span className="pc-lb-chicken-icon">🐔</span> {e.username}</> : e.username}
                 </td>
                 <td className="pc-lb-td pc-lb-num">{record(e)}</td>
+                <td className="pc-lb-td pc-lb-num">{e.wins}</td>
                 <td className="pc-lb-td pc-lb-num">{pct(e)}</td>
                 <td className="pc-lb-td pc-lb-num">{e.picked}</td>
               </tr>

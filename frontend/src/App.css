@@ -306,6 +306,13 @@ body { font-family: 'DM Sans', sans-serif; background: #FDF6E3; color: #1a1208; 
 .pc-lb-th-rank { width: 32px; }
 .pc-lb-th-num  { text-align: right; width: 70px; }
 
+.pc-lb-th-sortable {
+  cursor: pointer;
+  user-select: none;
+}
+.pc-lb-th-sortable:hover { color: #c8922a; }
+.pc-lb-th-active { color: #c8922a; border-bottom-color: #c8922a; }
+
 .pc-lb-tr {
   border-bottom: 1px dashed #c8bfa0;
 }
