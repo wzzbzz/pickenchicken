@@ -76,6 +76,7 @@ class OddsFetchCommand extends Command
             }
 
             // Skip locked markets — lines are canonical, don't overwrite
+            $market = $this->marketRepo->findOneByGameAndMarket($game, $marketKey, 'draftkings');
             if ($market && $market->isLocked()) {
                 $io->text(sprintf('  <comment>Locked (skip):</comment> %s vs %s',
                     $game->getAwayTeam(), $game->getHomeTeam()
