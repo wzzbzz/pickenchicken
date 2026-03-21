@@ -144,7 +144,7 @@ class TournamentController extends AbstractController
 
         return $this->json([
             'userOutcome'    => $this->serialiseOutcome($pick->getUserOutcome()),
-            'chickenOutcome' => $this->serialiseOutcome($chickenPick->getOutcome()),
+            'chickenOutcome' => $chickenPick ? $this->serialiseOutcome($chickenPick->getOutcome()) : null,
             'marketKey'      => $pick->getMarketKey(),
             'result'         => $pick->getResult(),
         ], 201);
