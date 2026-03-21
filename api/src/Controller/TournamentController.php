@@ -132,12 +132,8 @@ class TournamentController extends AbstractController
             return $this->json(['error' => 'Outcome does not belong to this game'], 400);
 
         $market = $userOutcome->getMarket();
-        if (!$market->isLocked())
-            return $this->json(['error' => 'Odds not yet locked — check back at 10am on game day'], 425);
 
         $chickenPick = $this->chickenPickRepo->findOneByGame($game);
-        if (!$chickenPick)
-            return $this->json(['error' => 'Chicken has not yet picked for this game'], 425);
 
         $pick = $this->pickRepo->findOneByUserAndGame($user, $game) ?? new Pick();
         $pick->setUser($user)->setGame($game)->setUserOutcome($userOutcome)
