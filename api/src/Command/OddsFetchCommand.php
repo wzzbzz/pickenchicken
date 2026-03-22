@@ -149,15 +149,14 @@ class OddsFetchCommand extends Command
         $this->em->persist($market);
         $this->em->flush(); // need ID before outcomes
 
-        // Remove existing outcomes and replace with fresh data
-        foreach ($market->getOutcomes() as $existing) {
-            $this->em->remove($existing);
+        // Update outcomes in place — never delete, to avoid breaking existing picks
+        $existing = [];
+        foreach ($market->getOutcomes() as $o) {
+            $existing[$o->getName()] = $o;
         }
-        $this->em->flush();
 
-        // Insert fresh outcomes
         foreach ($outcomes as $outcomeData) {
-            $outcome = new MarketOutcome();
+            $outcome = $existing[$outcomeData['name']] ?? new MarketOutcome();
             $outcome->setMarket($market)
                     ->setName($outcomeData['name'])
                     ->setDescription($outcomeData['description'])
