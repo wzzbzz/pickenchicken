@@ -20,8 +20,8 @@ if [ "$MINUTE" = "00" ]; then
     $PHP "$CONSOLE" app:odds:fetch >> "$API_DIR/var/log/cron.log" 2>&1
 fi
 
-# Run odds:lock every 5 minutes
-if [ $((10#$MINUTE % 5)) -eq 0 ]; then
+# Run odds:lock every 30 minutes
+if [ $((10#$MINUTE % 30)) -eq 0 ]; then
     log "Running odds:lock"
     $PHP "$CONSOLE" app:odds:lock >> "$API_DIR/var/log/cron.log" 2>&1
 fi

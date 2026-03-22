@@ -89,10 +89,14 @@ class OddsLockCommand extends Command
             return Command::SUCCESS;
         }
 
-        // Fetch odds snapshot — use provided date or simulated now
-        $fetchDate = $dateOpt ?? $now->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s\Z');
-        $io->text("Fetching odds snapshot: $fetchDate");
-        $oddsEvents = $this->oddsApi->fetchHistoricalOdds($fetchDate, $marketKey);
+        // Fetch odds — use historical snapshot only if explicitly provided (dev/sim use), otherwise live
+        if ($dateOpt) {
+            $io->text("Fetching historical odds snapshot: $dateOpt");
+            $oddsEvents = $this->oddsApi->fetchHistoricalOdds($dateOpt, $marketKey);
+        } else {
+            $io->text('Fetching live odds');
+            $oddsEvents = $this->oddsApi->fetchLiveOdds($marketKey);
+        }
         $io->info(sprintf('Got %d events from Odds API', count($oddsEvents)));
 
         $locked = 0;
