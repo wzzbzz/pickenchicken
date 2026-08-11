@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+
+parameters:
+    odds_warehouse_url: '%env(ODDS_WAREHOUSE_API_URL)%'
+    frontend_url: '%env(FRONTEND_URL)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+
+    App\Service\OddsWarehouseService:
+        arguments:
+            $baseUrl: '%odds_warehouse_url%'
+
+    App\Controller\AuthController:
+        arguments:
+            $frontendUrl: '%frontend_url%'
+
+    App\Service\PresenceService:
+        arguments:
+            $redis: '@predis.client'
+
+    App\Service\LocationSessionService:
+        arguments:
+            $redis: '@predis.client'
+
+    predis.client:
+        class: Predis\Client
+        arguments:
+            - '%env(REDIS_URL)%'
