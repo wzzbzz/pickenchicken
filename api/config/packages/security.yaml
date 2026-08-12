@@ -20,16 +20,13 @@ security:
                 - App\Security\SessionAuthenticator
             entry_point: App\Security\SessionAuthenticator
 
-    access_control:
-        - { path: ^/api/auth/request-login,   roles: PUBLIC_ACCESS }
-        - { path: ^/api/auth/verify-token,    roles: PUBLIC_ACCESS }
-        - { path: ^/api/auth/login,           roles: PUBLIC_ACCESS }
-        - { path: ^/api/location/current,    roles: PUBLIC_ACCESS }
-        - { path: ^/api/auth/logout,          roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/auth/me,              roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/auth/update-username, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/admin,                roles: ROLE_ADMIN }
-        - { path: ^/api/dev/clock,            roles: ROLE_ADMIN }
+    # No path-based access_control here on purpose — every route's access
+    # requirement is declared on the controller action itself via the
+    # #[RequiresPermission] attribute and enforced uniformly by
+    # App\EventListener\PermissionCheckListener, which also writes an
+    # ActionLog row for every request. Keeping path-regex rules here too
+    # would let some routes get denied upstream of that listener (skipping
+    # both the log and the single source of truth for what a route needs).
 
 when@test:
     security:

@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\BankrollRepository;
 use App\Repository\BetRepository;
 use App\Repository\UserPickRepository;
+use App\Security\RequiresPermission;
 use App\Service\SimulatedClockService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,10 +27,9 @@ class BetController extends AbstractController
     ) {}
 
     #[Route('/picks/{pickId}/bet', methods: ['POST'])]
+    #[RequiresPermission('place_bets')]
     public function create(int $pickId, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 
@@ -80,10 +80,9 @@ class BetController extends AbstractController
     }
 
     #[Route('/bets/{id}', methods: ['PATCH'])]
+    #[RequiresPermission('place_bets')]
     public function update(int $id, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 
@@ -124,10 +123,9 @@ class BetController extends AbstractController
     }
 
     #[Route('/bets', methods: ['GET'])]
+    #[RequiresPermission('place_bets')]
     public function list(): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 

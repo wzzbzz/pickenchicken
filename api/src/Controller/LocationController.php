@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\ProsoponRepository;
+use App\Security\RequiresPermission;
 use App\Service\LocationSessionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,6 +20,7 @@ class LocationController extends AbstractController
     ) {}
 
     #[Route('/current', methods: ['GET'])]
+    #[RequiresPermission(public: true)]
     public function current(Request $request): JsonResponse
     {
         /** @var User|null $user */

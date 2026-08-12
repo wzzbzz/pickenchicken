@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Session;
 use App\Entity\User;
+use App\Repository\RoleRepository;
 use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
+use App\Repository\UserSettingsRepository;
 use App\Repository\WalletRepository;
+use App\Security\RequiresPermission;
 use App\Service\SimulatedClockService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,12 +32,15 @@ class AuthController extends AbstractController
         private readonly UserRepository $userRepository,
         private readonly SessionRepository $sessionRepository,
         private readonly WalletRepository $walletRepository,
+        private readonly UserSettingsRepository $userSettingsRepository,
+        private readonly RoleRepository $roleRepository,
         private readonly MailerInterface $mailer,
         private readonly UserPasswordHasherInterface $hasher,
         private readonly string $frontendUrl,
     ) {}
 
     #[Route('/request-login', methods: ['POST'])]
+    #[RequiresPermission(public: true)]
     public function requestLogin(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -50,6 +56,7 @@ class AuthController extends AbstractController
             $user = new User();
             $user->setEmail($email);
             $this->em->persist($user);
+            $this->roleRepository->provisionDefaultForUser($user);
         }
 
         $token = bin2hex(random_bytes(20));
@@ -71,6 +78,7 @@ class AuthController extends AbstractController
     }
 
     #[Route('/verify-token', methods: ['POST'])]
+    #[RequiresPermission(public: true)]
     public function verifyToken(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -87,6 +95,8 @@ class AuthController extends AbstractController
 
         $session = $this->createSession($user, $request);
         $wallet  = $this->walletRepository->provisionForUser($user);
+        $this->userSettingsRepository->provisionForUser($user);
+        $this->roleRepository->provisionDefaultForUser($user);
 
         return new JsonResponse([
             'user'         => $this->serializeUser($user, $wallet),
@@ -114,12 +124,14 @@ class AuthController extends AbstractController
             'email'        => $user->getEmail(),
             'username'     => $user->getUsername(),
             'roles'        => $user->getRoles(),
+            'permissions'  => $user->getPermissionKeys(),
             'has_password' => $user->hasPassword(),
             'wallet'       => $wallet?->toArray(),
         ];
     }
 
     #[Route('/me', methods: ['GET'])]
+    #[RequiresPermission]
     public function me(): JsonResponse
     {
         /** @var User $user */
@@ -130,6 +142,7 @@ class AuthController extends AbstractController
     }
 
     #[Route('/update-username', methods: ['PATCH'])]
+    #[RequiresPermission]
     public function updateUsername(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -158,6 +171,7 @@ class AuthController extends AbstractController
     }
 
     #[Route('/login', methods: ['POST'])]
+    #[RequiresPermission(public: true)]
     public function login(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -172,6 +186,8 @@ class AuthController extends AbstractController
 
         $session = $this->createSession($user, $request);
         $wallet  = $this->walletRepository->provisionForUser($user);
+        $this->userSettingsRepository->provisionForUser($user);
+        $this->roleRepository->provisionDefaultForUser($user);
 
         return new JsonResponse([
             'user'         => $this->serializeUser($user, $wallet),
@@ -180,10 +196,9 @@ class AuthController extends AbstractController
     }
 
     #[Route('/set-password', methods: ['POST'])]
+    #[RequiresPermission]
     public function setPassword(Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 
@@ -201,6 +216,7 @@ class AuthController extends AbstractController
     }
 
     #[Route('/logout', methods: ['POST'])]
+    #[RequiresPermission]
     public function logout(Request $request): JsonResponse
     {
         $token = $request->headers->get('X-Session-Token');

@@ -8,6 +8,7 @@ use App\Entity\UserPick;
 use App\Repository\CompetitionSegmentRepository;
 use App\Repository\GameRepository;
 use App\Repository\UserPickRepository;
+use App\Security\RequiresPermission;
 use App\Service\SimulatedClockService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,7 @@ class GameController extends AbstractController
     ) {}
 
     #[Route('/games/feed', methods: ['GET'])]
+    #[RequiresPermission(public: true)]
     public function feed(Request $request): JsonResponse
     {
         $sport = $request->query->get('sport');
@@ -59,10 +61,9 @@ class GameController extends AbstractController
     }
 
     #[Route('/picks', methods: ['GET'])]
+    #[RequiresPermission]
     public function myPicks(): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 
@@ -78,6 +79,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/segments/{id}/games', methods: ['GET'])]
+    #[RequiresPermission(public: true)]
     public function gamesForSegment(int $id): JsonResponse
     {
         $segment = $this->segmentRepo->find($id);
@@ -105,6 +107,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/games/{id}', methods: ['GET'])]
+    #[RequiresPermission(public: true)]
     public function show(int $id): JsonResponse
     {
         $game = $this->gameRepo->find($id);
@@ -120,10 +123,9 @@ class GameController extends AbstractController
     }
 
     #[Route('/games/{id}/pick', methods: ['POST'])]
+    #[RequiresPermission('make_picks')]
     public function submitPick(int $id, Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 
@@ -165,10 +167,9 @@ class GameController extends AbstractController
     }
 
     #[Route('/games/{id}/pick/lock', methods: ['POST'])]
+    #[RequiresPermission('make_picks')]
     public function lockPick(int $id): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 
@@ -193,10 +194,9 @@ class GameController extends AbstractController
     }
 
     #[Route('/games/{id}/pick/unlock', methods: ['POST'])]
+    #[RequiresPermission('make_picks')]
     public function unlockPick(int $id): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 

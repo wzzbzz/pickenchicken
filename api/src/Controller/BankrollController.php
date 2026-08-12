@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Bankroll;
 use App\Entity\User;
 use App\Repository\BankrollRepository;
+use App\Security\RequiresPermission;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,10 +21,9 @@ class BankrollController extends AbstractController
     ) {}
 
     #[Route('', methods: ['GET'])]
+    #[RequiresPermission('place_bets')]
     public function show(Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
         $isFae = $request->query->getBoolean('fae', false);
@@ -34,10 +34,9 @@ class BankrollController extends AbstractController
     }
 
     #[Route('', methods: ['POST'])]
+    #[RequiresPermission('place_bets')]
     public function create(Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 

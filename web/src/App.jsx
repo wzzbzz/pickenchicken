@@ -5,6 +5,7 @@ import VerifyPage from './pages/VerifyPage.jsx';
 import SetPasswordPage from './pages/SetPasswordPage.jsx';
 import LeagueSelectorPage from './pages/LeagueSelectorPage.jsx';
 import CompetitionPage from './pages/CompetitionPage.jsx';
+import SettingsPage from './pages/SettingsPage.jsx';
 
 function RequireAuth({ children }) {
   return isLoggedIn() ? children : <Navigate to="/" replace />;
@@ -18,6 +19,7 @@ export default function App() {
       <Route path="/set-password" element={<RequireAuth><SetPasswordPage /></RequireAuth>} />
       <Route path="/leagues" element={<RequireAuth><LeagueSelectorPage /></RequireAuth>} />
       <Route path="/competitions/:id" element={<RequireAuth><CompetitionPage /></RequireAuth>} />
+      <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
     </Routes>
   );
 }

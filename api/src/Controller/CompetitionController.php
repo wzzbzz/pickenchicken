@@ -8,6 +8,7 @@ use App\Repository\CompetitionRepository;
 use App\Repository\GameRepository;
 use App\Repository\PlayerProgressRepository;
 use App\Repository\UserPickRepository;
+use App\Security\RequiresPermission;
 use App\Service\SimulatedClockService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,6 +29,7 @@ class CompetitionController extends AbstractController
     ) {}
 
     #[Route('', methods: ['GET'])]
+    #[RequiresPermission(public: true)]
     public function list(): JsonResponse
     {
         $competitions = $this->competitionRepo->findBy(
@@ -39,6 +41,7 @@ class CompetitionController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['GET'])]
+    #[RequiresPermission(public: true)]
     public function show(int $id): JsonResponse
     {
         $competition = $this->competitionRepo->find($id);
@@ -59,6 +62,7 @@ class CompetitionController extends AbstractController
     }
 
     #[Route('/{id}/segments', methods: ['GET'])]
+    #[RequiresPermission(public: true)]
     public function segments(int $id): JsonResponse
     {
         $competition = $this->competitionRepo->find($id);
@@ -79,6 +83,7 @@ class CompetitionController extends AbstractController
     }
 
     #[Route('/{id}/segments/current', methods: ['GET'])]
+    #[RequiresPermission(public: true)]
     public function currentSegment(int $id): JsonResponse
     {
         $competition = $this->competitionRepo->find($id);
@@ -112,10 +117,9 @@ class CompetitionController extends AbstractController
     }
 
     #[Route('/{id}/my-progress', methods: ['GET'])]
+    #[RequiresPermission]
     public function myProgress(int $id): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 
@@ -128,10 +132,9 @@ class CompetitionController extends AbstractController
     }
 
     #[Route('/{id}/join', methods: ['POST'])]
+    #[RequiresPermission]
     public function join(int $id): JsonResponse
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 

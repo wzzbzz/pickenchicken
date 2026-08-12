@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Security\RequiresPermission;
 use App\Service\SimulatedClockService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,12 +15,14 @@ class DevController extends AbstractController
     public function __construct(private readonly SimulatedClockService $clock) {}
 
     #[Route('/clock', methods: ['GET'])]
+    #[RequiresPermission('admin_access')]
     public function getClock(): JsonResponse
     {
         return new JsonResponse(['now' => $this->clock->now()->format('c')]);
     }
 
     #[Route('/clock', methods: ['POST'])]
+    #[RequiresPermission('admin_access')]
     public function setClock(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

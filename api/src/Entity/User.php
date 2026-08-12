@@ -42,10 +42,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'user')]
     private Collection $sessions;
 
+    #[ORM\ManyToMany(targetEntity: Role::class)]
+    #[ORM\JoinTable(name: 'user_role')]
+    private Collection $userRoles;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->sessions = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -62,10 +67,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
+
+        foreach ($this->userRoles as $role) {
+            foreach ($role->getPermissions() as $permission) {
+                $roles[] = $permission->toRoleString();
+            }
+        }
+
         return array_unique($roles);
     }
 
     public function setRoles(array $roles): static { $this->roles = $roles; return $this; }
+
+    /** Every permission key granted across all assigned Roles, e.g. ['access_console', 'place_bets']. */
+    public function getPermissionKeys(): array
+    {
+        $keys = [];
+        foreach ($this->userRoles as $role) {
+            foreach ($role->getPermissions() as $permission) {
+                $keys[] = $permission->getKey();
+            }
+        }
+        return array_values(array_unique($keys));
+    }
+
+    public function getRoleEntities(): Collection { return $this->userRoles; }
+
+    public function addRoleEntity(Role $role): static
+    {
+        if (!$this->userRoles->contains($role)) {
+            $this->userRoles->add($role);
+        }
+        return $this;
+    }
+
+    public function removeRoleEntity(Role $role): static
+    {
+        $this->userRoles->removeElement($role);
+        return $this;
+    }
 
     public function getLoginToken(): ?string { return $this->loginToken; }
     public function setLoginToken(?string $loginToken): static { $this->loginToken = $loginToken; return $this; }

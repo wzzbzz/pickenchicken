@@ -38,6 +38,7 @@ export default function LeagueSelectorPage() {
         <h1 style={styles.title}>Beat The Chicken</h1>
         <div style={styles.headerRight}>
           <span style={styles.username}>{user?.username ?? user?.email}</span>
+          <button style={styles.settingsBtn} onClick={() => navigate('/settings')}>Settings</button>
           <button style={styles.logoutBtn} onClick={handleLogout}>Log out</button>
         </div>
       </header>
@@ -99,6 +100,15 @@ const styles = {
   username: {
     fontSize: '0.875rem',
     color: '#666',
+  },
+  settingsBtn: {
+    background: 'none',
+    border: '1px solid #ccc',
+    color: '#555',
+    padding: '0.25rem 0.75rem',
+    borderRadius: 4,
+    cursor: 'pointer',
+    fontSize: '0.8rem',
   },
   logoutBtn: {
     background: 'none',

@@ -5,6 +5,8 @@ namespace App\Tests\Controller;
 use App\Entity\Competition;
 use App\Entity\CompetitionSegment;
 use App\Entity\Game;
+use App\Entity\Permission;
+use App\Entity\Role;
 use App\Entity\Session;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,11 +30,35 @@ class PickBetBankrollFlowTest extends WebTestCase
         $this->em = $this->client->getContainer()->get('doctrine')->getManager();
     }
 
+    /** RequiresPermission('make_picks')/('place_bets') routes need this — see PermissionCheckListener. */
+    private function grantMakePicksAndPlaceBets(User $user): void
+    {
+        $makePicks = new Permission();
+        $makePicks->setKey('make_picks');
+        $makePicks->setLabel('Submit, lock, and unlock game picks');
+        $this->em->persist($makePicks);
+
+        $placeBets = new Permission();
+        $placeBets->setKey('place_bets');
+        $placeBets->setLabel('Place bets against picks');
+        $this->em->persist($placeBets);
+
+        $role = new Role();
+        $role->setName('test-role-' . uniqid());
+        $role->setLabel('Test role');
+        $role->addPermission($makePicks);
+        $role->addPermission($placeBets);
+        $this->em->persist($role);
+
+        $user->addRoleEntity($role);
+    }
+
     private function createAuthenticatedUser(): array
     {
         $user = new User();
         $user->setEmail('test-' . uniqid() . '@example.com');
         $this->em->persist($user);
+        $this->grantMakePicksAndPlaceBets($user);
 
         $session = new Session();
         $session->setUser($user);
