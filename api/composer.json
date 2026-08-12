@@ -21,6 +21,7 @@
         "symfony/mercure-bundle": "^0.4.3",
         "symfony/runtime": "8.0.*",
         "symfony/security-bundle": "8.0.*",
+        "symfony/sendgrid-mailer": "8.0.*",
         "symfony/yaml": "8.0.*"
     },
     "config": {
