@@ -17,6 +17,12 @@ class UserSettings
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $nickname = null;
+
     #[ORM\Column(nullable: true)]
     private ?string $avatarUrl = null;
 
@@ -43,6 +49,12 @@ class UserSettings
 
     public function getUser(): User { return $this->user; }
 
+    public function getName(): ?string { return $this->name; }
+    public function setName(?string $name): static { $this->name = $name; return $this; }
+
+    public function getNickname(): ?string { return $this->nickname; }
+    public function setNickname(?string $nickname): static { $this->nickname = $nickname; return $this; }
+
     public function getAvatarUrl(): ?string { return $this->avatarUrl; }
     public function setAvatarUrl(?string $avatarUrl): static { $this->avatarUrl = $avatarUrl; return $this; }
 
@@ -61,6 +73,8 @@ class UserSettings
     public function toArray(): array
     {
         return [
+            'name' => $this->name,
+            'nickname' => $this->nickname,
             'avatar_url' => $this->avatarUrl,
             'personal_statement' => $this->personalStatement,
             'pick_style' => $this->pickStyle,

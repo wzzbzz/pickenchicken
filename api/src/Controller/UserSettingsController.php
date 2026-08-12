@@ -50,6 +50,14 @@ class UserSettingsController extends AbstractController
             $settings->setAccountType($data['account_type']);
         }
 
+        if (array_key_exists('name', $data)) {
+            $settings->setName($data['name'] !== '' ? $data['name'] : null);
+        }
+
+        if (array_key_exists('nickname', $data)) {
+            $settings->setNickname($data['nickname'] !== '' ? $data['nickname'] : null);
+        }
+
         if (array_key_exists('avatar_url', $data)) {
             $settings->setAvatarUrl($data['avatar_url'] !== '' ? $data['avatar_url'] : null);
         }

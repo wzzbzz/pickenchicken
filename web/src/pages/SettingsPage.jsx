@@ -11,6 +11,8 @@ export default function SettingsPage() {
   const [error, setError] = useState(null);
   const [saved, setSaved] = useState(false);
 
+  const [name, setName] = useState('');
+  const [nickname, setNickname] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [personalStatement, setPersonalStatement] = useState('');
   const [pickStyleChoice, setPickStyleChoice] = useState('');
@@ -23,6 +25,8 @@ export default function SettingsPage() {
     (async () => {
       try {
         const data = await getSettings();
+        setName(data.name ?? '');
+        setNickname(data.nickname ?? '');
         setAvatarUrl(data.avatar_url ?? '');
         setPersonalStatement(data.personal_statement ?? '');
         setAccountType(data.account_type ?? 'human');
@@ -53,6 +57,8 @@ export default function SettingsPage() {
     try {
       const pickStyle = pickStyleChoice === 'other' ? pickStyleCustom : pickStyleChoice;
       const payload = {
+        name,
+        nickname,
         avatar_url: avatarUrl,
         personal_statement: personalStatement,
         pick_style: pickStyle,
@@ -89,6 +95,24 @@ export default function SettingsPage() {
         <h2 style={s.heading}>Settings</h2>
 
         <form onSubmit={handleSubmit} style={s.form}>
+          <label style={s.label}>Name</label>
+          <input
+            style={s.input}
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="Your name"
+          />
+
+          <label style={s.label}>Nickname</label>
+          <input
+            style={s.input}
+            type="text"
+            value={nickname}
+            onChange={e => setNickname(e.target.value)}
+            placeholder="What should other players call you?"
+          />
+
           {avatarUrl && <img src={avatarUrl} alt="Avatar preview" style={s.avatarPreview} />}
           <label style={s.label}>Avatar URL</label>
           <input
